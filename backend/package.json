@@ -7,7 +7,12 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "connect-mongo": "^6.0.0",
     "express": "^5.1.0",
-    "mongodb": "^6.22.0"
+    "express-rate-limit": "^8.7.3",
+    "express-session": "^1.19.0",
+    "mongodb": "^6.22.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
   }
 }

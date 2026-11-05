@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AuthPanel from "./AuthPanel.jsx";
 import PaperList from "./PaperList.jsx";
 import "./App.css";
 
@@ -69,6 +70,8 @@ export default function App() {
         <h1>PaperPulse</h1>
         <p>Browse 2026 research from universities in the United States and Canada.</p>
       </header>
+
+      <AuthPanel />
 
       <fieldset className="paper-filters">
         <legend>Filter papers</legend>

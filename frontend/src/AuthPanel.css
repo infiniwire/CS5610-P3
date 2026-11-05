@@ -1,0 +1,46 @@
+.auth-panel {
+  margin-bottom: 1.25rem;
+  padding: 0.875rem;
+  border: 1px solid #c7d1e3;
+  border-radius: 0.5rem;
+  background: white;
+}
+
+.auth-panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.auth-form,
+.auth-account {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.auth-form {
+  margin-bottom: 0.625rem;
+}
+
+.auth-form label {
+  display: grid;
+  flex: 1 1 13rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.25rem;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.auth-panel p {
+  margin: 0.25rem 0;
+  overflow-wrap: anywhere;
+}
+
+.auth-hint {
+  color: #44516a;
+}
+
+.auth-error {
+  color: #a5232a;
+}
