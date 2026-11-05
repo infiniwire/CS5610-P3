@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "dev": "concurrently --kill-others --success first --names backend,frontend \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "import:openalex": "node --env-file=.env backend/import-openalex.js",
     "build": "npm run build --workspace frontend",
     "start": "npm start --workspace backend"
   },
