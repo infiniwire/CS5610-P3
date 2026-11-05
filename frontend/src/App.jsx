@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import AuthPanel from "./AuthPanel.jsx";
+import DatasetAnalysis from "./DatasetAnalysis.jsx";
 import PaperIndex from "./PaperIndex.jsx";
 import ReportPage from "./ReportPage.jsx";
 import "./App.css";
@@ -110,11 +111,8 @@ export default function App() {
           </p>
         </section>
 
-        <section className="report-footer" aria-labelledby="references-heading">
-          <h2 id="references-heading">References</h2>
-          <p id="ref-openalex">[1] OpenAlex. <a href="https://openalex.org/"><em>OpenAlex scholarly index</em></a>.</p>
-        </section>
       </ReportPage>
+      <DatasetAnalysis />
     </main>
   );
 }

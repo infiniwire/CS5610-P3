@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 const pageSize = 20;
+const summaryCacheMs = 5 * 60 * 1000;
 const citationSorts = new Map([
   ["citations_desc", -1],
   ["citations_asc", 1],
@@ -58,6 +59,8 @@ function parseQuery({ institution, month, sort = "citations_desc", page = "1" })
 export function createPaperRouter(papers) {
   const router = Router();
   let institutionOptions;
+  let datasetSummary;
+  let summaryExpiresAt = 0;
 
   router.get("/", async (req, res) => {
     let query;
@@ -118,6 +121,82 @@ export function createPaperRouter(papers) {
       institutionOptions = undefined;
       console.error(`University query failed (${error.name}).`);
       return res.status(500).json({ error: "Could not load universities." });
+    }
+  });
+
+  router.get("/summary", async (_req, res) => {
+    try {
+      if (!datasetSummary || Date.now() >= summaryExpiresAt) {
+        summaryExpiresAt = Infinity;
+        datasetSummary = papers.aggregate([
+          {
+            $set: {
+              affiliationCountries: {
+                $setIntersection: [{ $ifNull: ["$institutions.country", []] }, ["US", "CA"]],
+              },
+            },
+          },
+          {
+            $group: {
+              _id: { $ifNull: ["$type", "unknown"] },
+              count: { $sum: 1 },
+              earliest: { $min: "$publicationDate" },
+              latest: { $max: "$publicationDate" },
+              usOnly: { $sum: { $cond: [{ $eq: ["$affiliationCountries", ["US"]] }, 1, 0] } },
+              canadaOnly: { $sum: { $cond: [{ $eq: ["$affiliationCountries", ["CA"]] }, 1, 0] } },
+              collaboration: { $sum: { $cond: [{ $eq: [{ $size: "$affiliationCountries" }, 2] }, 1, 0] } },
+            },
+          },
+          { $sort: { count: -1, _id: 1 } },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: "$count" },
+              earliest: { $min: "$earliest" },
+              latest: { $max: "$latest" },
+              types: { $push: { type: "$_id", count: "$count" } },
+              usOnly: { $sum: "$usOnly" },
+              canadaOnly: { $sum: "$canadaOnly" },
+              collaboration: { $sum: "$collaboration" },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              total: 1,
+              earliest: 1,
+              latest: 1,
+              types: 1,
+              affiliations: {
+                usOnly: "$usOnly",
+                canadaOnly: "$canadaOnly",
+                collaboration: "$collaboration",
+              },
+            },
+          },
+        ], { maxTimeMS: 15_000 }).toArray()
+          .then(([summary]) => {
+            summaryExpiresAt = Date.now() + summaryCacheMs;
+            return {
+              ...(summary ?? {
+                total: 0,
+                earliest: null,
+                latest: null,
+                types: [],
+                affiliations: { usOnly: 0, canadaOnly: 0, collaboration: 0 },
+              }),
+              calculatedAt: new Date(),
+            };
+          })
+          .catch((error) => {
+            datasetSummary = undefined;
+            throw error;
+          });
+      }
+      return res.json(await datasetSummary);
+    } catch (error) {
+      console.error(`Dataset summary failed (${error.name}).`);
+      return res.status(500).json({ error: "Could not load the dataset summary." });
     }
   });
 

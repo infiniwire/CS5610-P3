@@ -1,0 +1,38 @@
+.dataset-table {
+  width: min(100%, 27em);
+  margin: 1em auto;
+  border-collapse: collapse;
+  border-block: 1px solid var(--ink);
+  font-size: 10pt;
+  text-align: left;
+}
+
+.dataset-table caption {
+  margin-bottom: 0.35em;
+  font-size: 9pt;
+}
+
+.dataset-table caption span {
+  font-variant-caps: small-caps;
+}
+
+.dataset-table thead {
+  border-bottom: 1px solid var(--rule);
+}
+
+.dataset-table :is(th, td) {
+  padding: 0.2em 0.75em;
+}
+
+.dataset-table tbody th {
+  font-weight: 400;
+}
+
+.dataset-table tr > :not(:first-child) {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.dataset-table tfoot {
+  font-weight: 700;
+}
