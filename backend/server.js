@@ -50,6 +50,7 @@ const port = Number(process.env.PORT ?? 3000);
 const frontend = fileURLToPath(new URL("../frontend/dist/", import.meta.url));
 
 app.use(express.static(frontend));
+app.get("/papers", (_req, res) => res.sendFile("index.html", { root: frontend }));
 const server = app.listen(port, "0.0.0.0", async (error) => {
   if (error) {
     console.error(`PaperPulse could not listen on port ${port} (${error.code}).`);

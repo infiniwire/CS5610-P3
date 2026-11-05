@@ -16,9 +16,9 @@ export default function PaperList({ papers, start }) {
         return (
           <li key={paper.openAlexId}>
             <article>
-              <h2>
+              <h3>
                 <a href={paper.openAlexId} target="_blank" rel="noreferrer">{paper.title}</a>
-              </h2>
+              </h3>
               {authors.length > 0 && (
                 <p>{authors.join(", ")}{paper.authors.length > 3 && ", et al."}</p>
               )}

@@ -1,12 +1,8 @@
 .auth-panel {
-  margin-bottom: 1.25rem;
-  padding: 0.875rem;
-  border: 1px solid #c7d1e3;
-  border-radius: 0.5rem;
-  background: white;
+  margin-top: 0.75rem;
 }
 
-.auth-panel h2 {
+.auth-panel h3 {
   margin: 0 0 0.5rem;
   font-size: 1.125rem;
 }
@@ -29,7 +25,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 0.25rem;
   min-width: 0;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .auth-panel p {
@@ -38,9 +34,9 @@
 }
 
 .auth-hint {
-  color: #44516a;
+  color: var(--muted-ink);
 }
 
 .auth-error {
-  color: #a5232a;
+  color: var(--accent);
 }

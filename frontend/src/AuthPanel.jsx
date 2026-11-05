@@ -70,7 +70,7 @@ export default function AuthPanel() {
   const registering = mode === "register";
   return (
     <section className="auth-panel" aria-labelledby="account-heading">
-      <h2 id="account-heading">{user ? "Your account" : registering ? "Create an account" : "Sign in"}</h2>
+      <h3 id="account-heading">{user ? "Your account" : registering ? "Create an account" : "Sign in"}</h3>
       {checking ? (
         <p role="status">Checking sign-in status…</p>
       ) : user ? (
