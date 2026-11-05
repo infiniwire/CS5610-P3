@@ -1,0 +1,33 @@
+.paper-list {
+  margin: 0;
+  padding: 0 0 0 2.5rem;
+}
+
+.paper-list li {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #c7d1e3;
+  border-radius: 0.5rem;
+  background: white;
+  overflow-wrap: anywhere;
+}
+
+.paper-list h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.paper-list a {
+  color: #194986;
+}
+
+.paper-list p {
+  margin: 0.25rem 0 0;
+  color: #44516a;
+}
+
+.paper-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}

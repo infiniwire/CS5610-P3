@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { loadEnvFile } from "node:process";
 import { fileURLToPath } from "node:url";
 import { connectDatabase } from "./database.js";
+import { createPaperRouter, ensurePaperIndexes } from "./papers.js";
 
 const envFile = new URL("../.env", import.meta.url);
 if (existsSync(envFile)) {
@@ -26,9 +27,18 @@ try {
 
 const app = express();
 app.locals.db = client.db("paperpulse");
+const papers = app.locals.db.collection("papers");
+try {
+  await ensurePaperIndexes(papers);
+} catch (error) {
+  console.error(`Could not initialize paper indexes (${error.name}).`);
+  await client.close();
+  process.exit(1);
+}
 const port = Number(process.env.PORT ?? 3000);
 const frontend = fileURLToPath(new URL("../frontend/dist/", import.meta.url));
 
+app.use("/api/papers", createPaperRouter(papers));
 app.use(express.static(frontend));
 const server = app.listen(port, "0.0.0.0", async (error) => {
   if (error) {
