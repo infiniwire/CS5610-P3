@@ -1,0 +1,44 @@
+[ProjectProposal] @John Alexis Guerra Gomez (Teacher)
+PaperPulse - Discover and Track University Research
+Team Members: @Sheng Qin, @Tian Yuan
+
+Project Description:
+PaperPulse is a web application that helps users discover and track research papers by university, research category, and publication date. The application will focus on papers published in 2026 in the United States or Canada. Users will be able to register and log in to save papers and follow research categories. They can also view recently published papers in their followed categories.
+
+User Personas:
+
+Alex, a Graduate Student: Alex is working on a literature review and wants to find papers from different universities, save useful papers, and keep track of his reading progress.
+Sarah, a Researcher: Sarah wants to follow research categories such as machine learning and natural language processing, see newly published papers, and compare research activity across universities.
+
+
+User Stories
+@Sheng Qin: Paper Discovery and Saved Papers
+
+As Alex, I want to browse and search papers by title, author, university, research category, and publication date so I can find papers relevant to my research.
+As Alex, I want to view papers published by a selected university in a specific month and sort them by their current cumulative citation count so I can see which papers have received more citations.
+As Alex, I want to save papers, add notes, update my reading status, and remove saved papers so I can manage my reading list.
+
+
+@Tian Yuan: Research Category Tracker
+
+As Sarah, I want to follow research categories and view, update, or remove them so I can manage my research interests.
+As Sarah, I want to view recently published papers in my followed categories and mark when I last checked them so I can keep track of updates.
+As Sarah, I want to compare universities by the number of papers published in a selected category and month so I can explore research activity across institutions.
+
+
+Work Division:
+@Sheng Qin: Paper browsing and search, university and date filters, paper rankings, saved paper CRUD, Express routes, and React components for these features.
+@Tian Yuan: Research category tracking, followed topic CRUD, the recent papers dashboard, university rankings, Express routes, and React components for these features.
+
+Tech Stack:
+
+Frontend: React with Hooks, HTML5, CSS3, and Fetch API
+Backend: Node.js and Express
+Authentication: Passport
+Database: MongoDB using the native Node.js driver
+
+
+Requesting Approval For:
+
+dotenv: to manage environment variables
+recharts: to display monthly publication trends and university comparisons

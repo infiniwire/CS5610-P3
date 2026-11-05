@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.*
+.railway/
+/Doc/Courses/
+/Doc/Project 3_*.pdf
