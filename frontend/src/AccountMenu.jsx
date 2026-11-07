@@ -2,9 +2,20 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import "./AccountMenu.css";
 
+const labelStorageKey = "paperpulse.account-label";
+
+function readPreviousLabel() {
+  try {
+    const label = window.sessionStorage.getItem(labelStorageKey);
+    return label === "Account" || label === "Login" ? label : "";
+  } catch {
+    return "";
+  }
+}
+
 export default function AccountMenu({ loginOpen, onRequestSignOut }) {
   const { user, checking, requestSignIn } = useReader();
-
+  const [previousLabel] = useState(readPreviousLabel);
   const [open, setOpen] = useState(false);
   const root = useRef(null);
   const trigger = useRef(null);
@@ -12,6 +23,16 @@ export default function AccountMenu({ loginOpen, onRequestSignOut }) {
   const panelId = useId();
   const path = window.location.pathname.replace(/\/$/, "");
   const accountPage = ["/my-topics", "/saved-papers", "/settings"].includes(path);
+
+  useEffect(() => {
+    if (checking) return;
+    try {
+      // This is only a display hint. Never cache identity or authorize from storage.
+      window.sessionStorage.setItem(labelStorageKey, user ? "Account" : "Login");
+    } catch {
+      // Disabled storage falls back to a neutral, fixed-width placeholder.
+    }
+  }, [checking, user]);
 
   useEffect(() => {
     if (!open) return;
@@ -22,12 +43,18 @@ export default function AccountMenu({ loginOpen, onRequestSignOut }) {
     return () => document.removeEventListener("pointerdown", outside);
   }, [open]);
 
+  if (checking && !user)
+    return (
+      <span className="account-menu-pending" role="status" aria-label="Checking sign-in status">
+        <span aria-hidden="true">{previousLabel || "\u00a0"}</span>
+      </span>
+    );
+
   if (!user)
     return (
       <button
         type="button"
-        className="site-login-button"
-        disabled={checking}
+        className="site-login-button account-login"
         aria-haspopup="dialog"
         aria-controls="login-dialog"
         aria-expanded={loginOpen}

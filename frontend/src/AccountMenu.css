@@ -1,5 +1,17 @@
 .account-menu {
   position: relative;
+  inline-size: 4.5em;
+}
+.account-menu-pending {
+  display: inline-block;
+  inline-size: 4.5em;
+  text-align: right;
+  color: var(--ink);
+}
+.site-masthead .account-login,
+.site-masthead .account-trigger {
+  inline-size: 4.5em;
+  text-align: right;
 }
 .account-dropdown {
   position: absolute;
