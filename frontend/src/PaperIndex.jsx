@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PaperList from "./PaperList.jsx";
+import UniversityFilter from "./UniversityFilter.jsx";
 
 const initialQuery = {
   subject: "",
@@ -167,28 +168,14 @@ export default function PaperIndex() {
       </form>
       <fieldset className="paper-filters">
         <legend>Filter papers</legend>
-        <label>
-          University
-          <select
-            name="institution"
-            value={query.institution}
-            onChange={changeFilter}
-            disabled={universities.length === 0}
-          >
-            <option value="">
-              {universityError
-                ? "Universities unavailable"
-                : universities.length
-                  ? "All universities"
-                  : "Loading universities…"}
-            </option>
-            {universities.map(({ id, name, country }) => (
-              <option key={id} value={id}>
-                {name} ({country})
-              </option>
-            ))}
-          </select>
-        </label>
+        <UniversityFilter
+          universities={universities}
+          value={query.institution}
+          failed={universityError}
+          onChange={(institution) =>
+            setQuery((previous) => ({ ...previous, institution, page: 1 }))
+          }
+        />
         <label>
           Publication month
           <input
