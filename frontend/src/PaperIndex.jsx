@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import PaperList from "./PaperList.jsx";
 
 const initialQuery = {
+  subject: "",
+  author: "",
+  topic: "",
   institution: "",
   month: "",
   sort: "citations_desc",
@@ -22,10 +25,18 @@ export default function PaperIndex() {
 
     return {
       ...initialQuery,
+      subject: (params.get("subject") ?? "").slice(0, 120),
+      author: (params.get("author") ?? "").slice(0, 120),
+      topic: (params.get("topic") ?? "").slice(0, 120),
       institution: /^I[1-9]\d*$/.test(institution) ? `https://openalex.org/${institution}` : "",
       month: /^[1-9]\d{3}-(0[1-9]|1[0-2])$/.test(month) ? month : "",
     };
   });
+  const [search, setSearch] = useState(() => ({
+    subject: query.subject,
+    author: query.author,
+    topic: query.topic,
+  }));
   const [result, setResult] = useState(null);
   const [universities, setUniversities] = useState([]);
   const [universityError, setUniversityError] = useState(false);
@@ -48,6 +59,9 @@ export default function PaperIndex() {
     });
     if (query.institution) params.set("institution", query.institution);
     if (query.month) params.set("month", query.month);
+    for (const key of ["subject", "author", "topic"]) {
+      if (query[key]) params.set(key, query[key]);
+    }
 
     fetchJson(`/api/papers?${params}`, controller.signal)
       .then((data) => {
@@ -72,6 +86,22 @@ export default function PaperIndex() {
     setQuery((previous) => ({ ...previous, page: previous.page + offset }));
   }
 
+  function submitSearch(event) {
+    event.preventDefault();
+    setQuery((previous) => ({
+      ...previous,
+      subject: search.subject.trim(),
+      author: search.author.trim(),
+      topic: search.topic.trim(),
+      page: 1,
+    }));
+  }
+
+  function resetFilters() {
+    setSearch({ subject: "", author: "", topic: "" });
+    setQuery(initialQuery);
+  }
+
   return (
     <section className="research-index" id="papers" aria-labelledby="papers-heading">
       <div className="index-heading">
@@ -80,6 +110,61 @@ export default function PaperIndex() {
           Data from <a href="https://openalex.org/">OpenAlex</a>
         </p>
       </div>
+      <form
+        className="paper-search"
+        onSubmit={submitSearch}
+        role="search"
+        aria-label="Search papers"
+      >
+        <div className="paper-search-fields">
+          <label>
+            Subject (title)
+            <input
+              type="search"
+              name="subject"
+              maxLength={120}
+              placeholder="e.g. large language models"
+              value={search.subject}
+              onChange={(event) =>
+                setSearch((previous) => ({ ...previous, subject: event.target.value }))
+              }
+              aria-describedby="paper-search-hint"
+            />
+          </label>
+          <label>
+            Author
+            <input
+              type="search"
+              name="author"
+              maxLength={120}
+              placeholder="e.g. Wayne Xin Zhao"
+              value={search.author}
+              onChange={(event) =>
+                setSearch((previous) => ({ ...previous, author: event.target.value }))
+              }
+              aria-describedby="paper-search-hint"
+            />
+          </label>
+          <label>
+            Topics
+            <input
+              type="search"
+              name="topic"
+              maxLength={120}
+              placeholder="e.g. natural language processing"
+              value={search.topic}
+              onChange={(event) =>
+                setSearch((previous) => ({ ...previous, topic: event.target.value }))
+              }
+              aria-describedby="paper-search-hint"
+            />
+          </label>
+          <button type="submit">Search</button>
+        </div>
+        <p id="paper-search-hint">
+          Search titles, author names, and research topics. Filled fields are combined.
+        </p>
+      </form>
       <fieldset className="paper-filters">
         <legend>Filter papers</legend>
         <label>
@@ -121,7 +206,7 @@ export default function PaperIndex() {
             <option value="citations_asc">Least cited</option>
           </select>
         </label>
-        <button type="button" onClick={() => setQuery(initialQuery)}>
+        <button type="button" onClick={resetFilters}>
           Reset
         </button>
       </fieldset>

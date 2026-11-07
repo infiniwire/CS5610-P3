@@ -24,8 +24,33 @@ export async function ensurePaperIndexes(papers) {
   ]);
 }
 
-function parseQuery({ institution, month, sort = "citations_desc", page = "1" }) {
+export function parsePaperQuery({
+  institution,
+  month,
+  subject,
+  author,
+  topic,
+  sort = "citations_desc",
+  page = "1",
+}) {
   const filter = {};
+
+  for (const [name, value, field] of [
+    ["subject", subject, "title"],
+    ["author", author, "authors.name"],
+    ["topic", topic],
+  ]) {
+    if (value === undefined) continue;
+    if (typeof value !== "string" || value.length > 120) {
+      throw new Error(`${name} must be text with at most 120 characters.`);
+    }
+    const term = value.trim();
+    if (!term) continue;
+    // Treat user input as literal text, never as a regular expression.
+    const expression = { $regex: term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
+    if (field) filter[field] = expression;
+    else filter.$or = [{ "primaryTopic.name": expression }, { "topics.name": expression }];
+  }
 
   if (institution !== undefined) {
     const id =
@@ -67,7 +92,7 @@ export function createPaperRouter(papers, summaryCache) {
   router.get("/", async (req, res) => {
     let query;
     try {
-      query = parseQuery(req.query);
+      query = parsePaperQuery(req.query);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -186,5 +211,6 @@ export function createPaperRouter(papers, summaryCache) {
       return res.status(500).json({ error: "Could not load paper details." });
     }
   });
+
   return router;
 }
