@@ -73,7 +73,7 @@ test(
         for (const [method, path] of [
           ["GET", ""],
           ["GET", "/W1"],
-
+          ["GET", "/status?ids=W1"],
           ["POST", ""],
           ["PATCH", "/W1"],
           ["DELETE", "/W1"],

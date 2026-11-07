@@ -118,6 +118,23 @@ export function createSavedPaperRouter(savedPapers, papers) {
     });
   });
 
+  router.get("/status", async (req, res) => {
+    const { ids } = req.query;
+    if (typeof ids !== "string" || !ids || ids.length > 1200) {
+      throw new InputError("Provide between 1 and 20 OpenAlex work IDs.");
+    }
+    const values = ids.split(",");
+    if (values.length > pageSize) throw new InputError("Check at most 20 papers at a time.");
+    const openAlexIds = [...new Set(values.map(workId))];
+    const items = await savedPapers
+      .find(
+        { userId: req.user._id, openAlexId: { $in: openAlexIds } },
+        { projection: { _id: 0, openAlexId: 1 }, maxTimeMS: 10000 },
+      )
+      .toArray();
+    return res.json({ savedIds: items.map(({ openAlexId }) => openAlexId) });
+  });
+
   router.param("workId", (req, _res, next, value) => {
     try {
       req.openAlexId = workId(value);

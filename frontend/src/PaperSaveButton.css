@@ -1,0 +1,25 @@
+.paper-save-action {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+.paper-browser .paper-save-button {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.paper-browser .paper-save-button:disabled {
+  background: transparent;
+  color: var(--muted-ink);
+  text-decoration: none;
+}
+.paper-save-error {
+  color: var(--accent);
+  font-style: normal;
+}
