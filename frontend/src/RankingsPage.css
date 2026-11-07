@@ -1,0 +1,197 @@
+.rankings-title {
+  margin: 2.5rem 0 1.5rem;
+  text-align: center;
+}
+
+.rankings-title h1 {
+  margin: 0;
+  font-size: var(--font-title);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.rankings-title > p {
+  margin: 0.5rem 0 0;
+  font-size: var(--font-body);
+  font-variant-caps: small-caps;
+}
+
+.rankings-intro {
+  max-width: 42rem;
+  margin: 0 auto 1rem;
+  text-align: center;
+}
+
+.ranking-note,
+.ranking-range {
+  color: var(--muted-ink);
+  font-size: var(--font-small);
+}
+
+.ranking-range {
+  text-align: center;
+}
+
+.rankings-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 2rem 0 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.paper-browser .rankings-tabs button {
+  min-height: 2.5rem;
+  padding-inline: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+}
+
+.paper-browser .rankings-tabs [aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.ranking-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ranking-heading h2,
+.rankings-methods h2 {
+  margin: 0;
+  font-size: var(--font-section);
+  font-weight: 400;
+  font-variant-caps: small-caps;
+}
+
+.ranking-order {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-small);
+}
+
+.ranking-note {
+  margin: 0.75rem 0 1rem;
+}
+
+.ranking-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.ranking-table {
+  font-size: var(--font-small);
+  width: 100%;
+  min-width: 30rem;
+  border-collapse: collapse;
+  border-block: 1px solid var(--ink);
+}
+
+.ranking-paper-table {
+  min-width: 0;
+}
+
+.ranking-entity-table {
+  min-width: 34rem;
+}
+
+.ranking-table.ranking-entity-table :is(th, td) {
+  padding-block: 0.45rem;
+  vertical-align: middle;
+}
+
+.ranking-table caption {
+  margin-bottom: 0.65rem;
+  text-align: left;
+  font-size: var(--font-small);
+  font-style: italic;
+}
+
+.ranking-table :is(th, td) {
+  padding: 0.75rem 0.5rem;
+  vertical-align: top;
+  text-align: right;
+}
+
+.ranking-table thead {
+  border-bottom: 1px solid var(--ink);
+}
+
+.ranking-table tbody tr {
+  border-bottom: 1px solid var(--rule);
+}
+
+.ranking-table tr > :nth-child(2) {
+  width: 60%;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.ranking-entity-table tr > :nth-child(2) {
+  width: 44%;
+}
+
+.ranking-table tbody th {
+  font-weight: 400;
+}
+
+.ranking-table td {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ranking-score {
+  font-weight: 700;
+}
+
+.ranking-position {
+  color: var(--muted-ink);
+}
+
+.ranking-table .ranking-title-button {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.ranking-authors,
+.ranking-identity,
+.ranking-publication-date {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--muted-ink);
+  font-size: var(--font-small);
+  font-weight: 400;
+}
+
+.rankings-methods {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ink);
+  font-size: var(--font-small);
+}
+
+.rankings-methods p {
+  margin: 0.75rem 0 0;
+}
+
+@media (max-width: 40rem) {
+  .rankings-title {
+    margin-top: 1.75rem;
+  }
+}

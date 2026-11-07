@@ -4,7 +4,7 @@ import AuthDialog from "./AuthDialog.jsx";
 import DatasetAnalysis from "./DatasetAnalysis.jsx";
 import PaperIndex from "./PaperIndex.jsx";
 import AnalysisPage from "./AnalysisPage.jsx";
-
+import RankingsPage from "./RankingsPage.jsx";
 import ReportPage from "./ReportPage.jsx";
 import ProjectFooter from "./ProjectFooter.jsx";
 
@@ -14,8 +14,9 @@ import "./App.css";
 export default function App() {
   const isPapersPage = /^\/papers\/?$/i.test(window.location.pathname);
   const isAnalysisPage = /^\/analysis\/?$/i.test(window.location.pathname);
+  const isRankingsPage = /^\/rankings\/?$/i.test(window.location.pathname);
 
-  const isIndexPage = isPapersPage || isAnalysisPage;
+  const isIndexPage = isPapersPage || isAnalysisPage || isRankingsPage;
   const [loginOpen, setLoginOpen] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -67,7 +68,9 @@ export default function App() {
           <a href="/analysis" aria-current={isAnalysisPage ? "page" : undefined}>
             Analysis
           </a>
-
+          <a href="/rankings" aria-current={isRankingsPage ? "page" : undefined}>
+            Rankings
+          </a>
           <button
             type="button"
             className="site-login-button"
@@ -89,7 +92,7 @@ export default function App() {
       <ReaderContext.Provider value={reader}>
         <main className={`paper-browser${isAnalysisPage ? " analysis-document" : ""}`} id="top">
           {masthead}
-          {isAnalysisPage ? <AnalysisPage /> : <PaperIndex />}
+          {isAnalysisPage ? <AnalysisPage /> : isRankingsPage ? <RankingsPage /> : <PaperIndex />}
           <footer className="site-footer">
             <span>PaperPulse · 2026</span>
             <a href="#top">Back to top</a>
@@ -122,7 +125,8 @@ export default function App() {
               Our goal is to make university research easier to discover and compare. Browse the{" "}
               <a href="/papers">paper index</a> by title, author, topic, university, or month, and
               select a title for details. Explore publication patterns in{" "}
-              <a href="/analysis">Analysis</a>, using OpenAlex records{" "}
+              <a href="/analysis">Analysis</a> and compare papers, universities, authors, and topics
+              in <a href="/rankings">Rankings</a>, using OpenAlex records{" "}
               <a className="report-citation" href="#ref-openalex">
                 [1]
               </a>
