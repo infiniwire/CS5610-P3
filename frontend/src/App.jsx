@@ -1,20 +1,39 @@
-import ProjectFooter from "./ProjectFooter.jsx";
-import { useLayoutEffect, useRef } from "react";
-import AuthPanel from "./AuthPanel.jsx";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import AuthDialog from "./AuthDialog.jsx";
+
 import DatasetAnalysis from "./DatasetAnalysis.jsx";
 import PaperIndex from "./PaperIndex.jsx";
+
 import ReportPage from "./ReportPage.jsx";
+import ProjectFooter from "./ProjectFooter.jsx";
+
+import { ReaderContext } from "./ReaderContext.js";
 import "./App.css";
 
 export default function App() {
   const isPapersPage = /^\/papers\/?$/i.test(window.location.pathname);
-  const accountMenu = useRef(null);
-  const accountToggle = useRef(null);
+
+  const isIndexPage = isPapersPage;
+  const [loginOpen, setLoginOpen] = useState(false);
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authChecking, setAuthChecking] = useState(true);
   const reportDocument = useRef(null);
+  const userChanged = useCallback((user) => {
+    setCurrentUser(user);
+    setAuthChecking(false);
+  }, []);
+  const requestSignIn = useCallback(() => setLoginOpen(true), []);
+  const sessionExpired = useCallback(() => {
+    setCurrentUser(null);
+    setAuthChecking(false);
+    setLoginOpen(true);
+  }, []);
+  const reader = { user: currentUser, checking: authChecking, requestSignIn, sessionExpired };
 
   useLayoutEffect(() => {
     const report = reportDocument.current;
-    if (!report) return;
+    if (!report || isIndexPage) return;
     const sheet = report.querySelector(".report-sheet");
 
     function updateScale() {
@@ -28,58 +47,56 @@ export default function App() {
     const observer = new ResizeObserver(updateScale);
     observer.observe(report);
     return () => observer.disconnect();
-  }, []);
+  }, [isIndexPage]);
 
   const masthead = (
-    <header className="site-masthead">
-      <a className="site-wordmark" href="/">
-        PaperPulse
-      </a>
-      <nav aria-label="Site navigation">
-        <a href="/" aria-current={isPapersPage ? undefined : "page"}>
-          Home
+    <>
+      <header className="site-masthead">
+        <a className="site-wordmark" href="/">
+          PaperPulse
         </a>
-        <a href="/papers" aria-current={isPapersPage ? "page" : undefined}>
-          Papers
-        </a>
-        <details
-          className="account-menu"
-          id="account"
-          ref={accountMenu}
-          onKeyDown={(event) => {
-            if (event.key !== "Escape" || !event.currentTarget.open) return;
-            event.preventDefault();
-            event.currentTarget.open = false;
-            accountToggle.current.focus();
-          }}
-        >
-          <summary ref={accountToggle}>Account</summary>
-          <div className="account-menu-panel">
-            <AuthPanel />
-          </div>
-        </details>
-      </nav>
-    </header>
+        <nav aria-label="Site navigation">
+          <a href="/" aria-current={isIndexPage ? undefined : "page"}>
+            Home
+          </a>
+          <a href="/papers" aria-current={isPapersPage ? "page" : undefined}>
+            Papers
+          </a>
+
+          <button
+            type="button"
+            className="site-login-button"
+            aria-haspopup="dialog"
+            aria-controls="login-dialog"
+            aria-expanded={loginOpen}
+            onClick={() => setLoginOpen(true)}
+          >
+            {currentUser ? "Account" : "Login"}
+          </button>
+        </nav>
+      </header>
+      <AuthDialog open={loginOpen} onClose={() => setLoginOpen(false)} onUserChange={userChanged} />
+    </>
   );
 
-  if (isPapersPage) {
+  if (isIndexPage) {
     return (
-      <>
+      <ReaderContext.Provider value={reader}>
         <main className="paper-browser" id="top">
           {masthead}
-          <PaperIndex />
+          {<PaperIndex />}
           <footer className="site-footer">
             <span>PaperPulse · 2026</span>
             <a href="#top">Back to top</a>
           </footer>
         </main>
         <ProjectFooter />
-      </>
+      </ReaderContext.Provider>
     );
   }
 
   return (
-    <>
+    <ReaderContext.Provider value={reader}>
       <main className="paper-browser report-document" id="top" ref={reportDocument}>
         {masthead}
         <ReportPage number={1}>
@@ -110,6 +127,6 @@ export default function App() {
         </ReportPage>
       </main>
       <ProjectFooter />
-    </>
+    </ReaderContext.Provider>
   );
 }

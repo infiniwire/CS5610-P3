@@ -1,21 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { authRequest } from "./authRequest.js";
 import "./AuthPanel.css";
 
-async function authRequest(action, { body, signal } = {}) {
-  const response = await fetch(`/api/auth/${action}`, {
-    method: body === undefined ? "GET" : "POST",
-    headers: body === undefined ? undefined : { "Content-Type": "application/json" },
-    body: body === undefined ? undefined : JSON.stringify(body),
-    signal,
-  });
-  const data = await response.json().catch(() => null);
-  if (!response.ok || !data) {
-    throw new Error(data?.error ?? "Could not reach the authentication service.");
-  }
-  return data.user;
-}
-
-export default function AuthPanel() {
+export default function AuthPanel({ headingId, open, onUserChange, onSignedIn }) {
+  const generatedHeadingId = useId();
+  const labelId = headingId ?? generatedHeadingId;
+  const formRef = useRef(null);
   const [user, setUser] = useState(null);
   const [checking, setChecking] = useState(true);
   const [mode, setMode] = useState("login");
@@ -24,18 +14,32 @@ export default function AuthPanel() {
 
   useEffect(() => {
     const controller = new AbortController();
+    setChecking(true);
     authRequest("me", { signal: controller.signal })
-      .then((currentUser) => {
-        if (!controller.signal.aborted) setUser(currentUser);
+      .then(({ user: currentUser }) => {
+        if (!controller.signal.aborted) {
+          setUser(currentUser);
+          onUserChange?.(currentUser);
+        }
       })
       .catch(() => {
-        if (!controller.signal.aborted) setError("Could not check your sign-in status.");
+        if (!controller.signal.aborted) {
+          setUser(null);
+          onUserChange?.(null);
+          setError("Could not check your sign-in status.");
+        }
       })
       .finally(() => {
         if (!controller.signal.aborted) setChecking(false);
       });
     return () => controller.abort();
-  }, []);
+  }, [onUserChange, open]);
+
+  useEffect(() => {
+    setMode("login");
+    setError("");
+    formRef.current?.reset();
+  }, [open]);
 
   async function submit(event) {
     event.preventDefault();
@@ -44,8 +48,11 @@ export default function AuthPanel() {
     setPending(true);
     setError("");
     try {
-      setUser(await authRequest(mode, { body }));
+      const { user: currentUser } = await authRequest(mode, { body });
+      setUser(currentUser);
+      onUserChange?.(currentUser);
       form.reset();
+      onSignedIn?.();
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -59,6 +66,7 @@ export default function AuthPanel() {
     try {
       await authRequest("logout", { body: {} });
       setUser(null);
+      onUserChange?.(null);
       setMode("login");
     } catch (requestError) {
       setError(requestError.message);
@@ -66,13 +74,11 @@ export default function AuthPanel() {
       setPending(false);
     }
   }
-
   const registering = mode === "register";
+
   return (
-    <section className="auth-panel" aria-labelledby="account-heading">
-      <h3 id="account-heading">
-        {user ? "Your account" : registering ? "Create an account" : "Sign in"}
-      </h3>
+    <section className="auth-panel" aria-labelledby={labelId}>
+      <h3 id={labelId}>{user ? "Your account" : registering ? "Create an account" : "Sign in"}</h3>
       {checking ? (
         <p role="status">Checking sign-in status…</p>
       ) : user ? (
@@ -86,10 +92,17 @@ export default function AuthPanel() {
         </div>
       ) : (
         <>
-          <form key={mode} className="auth-form" onSubmit={submit}>
+          <form key={mode} ref={formRef} className="auth-form" onSubmit={submit}>
             <label>
               Email
-              <input type="email" name="email" autoComplete="email" maxLength={254} required />
+              <input
+                type="email"
+                name="email"
+                autoComplete="email"
+                autoFocus={open}
+                maxLength={254}
+                required
+              />
             </label>
             <label>
               Password
@@ -109,6 +122,7 @@ export default function AuthPanel() {
           {registering && <p className="auth-hint">Use at least 8 characters for your password.</p>}
           <button
             type="button"
+            className="auth-mode-toggle"
             disabled={pending}
             onClick={() => {
               setMode(registering ? "login" : "register");

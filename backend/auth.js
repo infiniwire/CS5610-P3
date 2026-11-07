@@ -142,7 +142,10 @@ export async function configureAuth(app, client, secret) {
   auth.use(
     new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
       try {
-        const user = await users.findOne({ email }, { projection: { email: 1, passwordHash: 1 } });
+        const user = await users.findOne(
+          { email },
+          { projection: { email: 1, passwordHash: 1, authVersion: 1 } },
+        );
         const { salt, hash } = user?.passwordHash ?? emptyPasswordHash;
         const candidate = await passwordKey(password, salt);
         const matches = timingSafeEqual(candidate, Buffer.from(hash, "hex"));
@@ -153,13 +156,20 @@ export async function configureAuth(app, client, secret) {
     }),
   );
 
-  auth.serializeUser((user, done) => done(null, user._id.toHexString()));
-  auth.deserializeUser(async (id, done) => {
+  auth.serializeUser((user, done) =>
+    done(null, { id: user._id.toHexString(), version: user.authVersion ?? 0 }),
+  );
+  auth.deserializeUser(async (stored, done) => {
     try {
+      const { id, version } =
+        typeof stored === "string" ? { id: stored, version: 0 } : (stored ?? {});
       const user = ObjectId.isValid(id)
-        ? await users.findOne({ _id: new ObjectId(id) }, { projection: { email: 1 } })
+        ? await users.findOne(
+            { _id: new ObjectId(id) },
+            { projection: { email: 1, authVersion: 1 } },
+          )
         : null;
-      return done(null, user ?? false);
+      return done(null, user && (user.authVersion ?? 0) === version ? user : false);
     } catch (error) {
       return done(error);
     }
