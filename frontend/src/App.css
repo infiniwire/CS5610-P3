@@ -23,17 +23,17 @@
 }
 
 :root {
-  --paper: #fffefb;
-  --ink: #211d19;
-  --muted-ink: #62584f;
-  --rule: #d8d0c4;
-  --accent: #7b2923;
   --font-serif: "Latin Modern Roman", Georgia, serif;
   --font-body: 11pt;
   --font-title: 17pt;
   --font-section: 12pt;
   --font-small: 10pt;
   --font-caption: 9pt;
+  --paper: #fffefb;
+  --ink: #211d19;
+  --muted-ink: #62584f;
+  --rule: #d8d0c4;
+  --accent: #7b2923;
 }
 
 body {
@@ -85,43 +85,14 @@ body {
   gap: 0.25rem clamp(0.65rem, 3vw, 1.5rem);
 }
 
-.site-masthead nav a,
-.account-menu > summary {
+.site-masthead nav a {
   color: var(--ink);
   text-decoration: none;
 }
 
-.site-masthead nav a:hover,
-.account-menu > summary:hover,
-.account-menu[open] > summary {
+.site-masthead nav a:hover {
   color: var(--accent);
   text-decoration: underline;
-}
-
-.account-menu > summary {
-  display: block;
-  cursor: pointer;
-  list-style: none;
-}
-
-.account-menu > summary::-webkit-details-marker {
-  display: none;
-}
-
-.account-menu-panel {
-  position: absolute;
-  z-index: 1;
-  inset-block-start: 100%;
-  inset-inline-end: 0;
-  box-sizing: border-box;
-  width: min(100%, 29rem);
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--rule);
-  background: var(--paper);
-}
-
-.account-menu-panel .auth-panel {
-  margin-top: 0;
 }
 
 .paper-browser.report-document {
@@ -192,13 +163,13 @@ body {
 }
 
 .report-edition {
-  margin: 1.25em 0 1.5em;
+  margin: 0.55em 0 1em;
   font-variant-caps: small-caps;
 }
 
 .report-page .report-abstract {
   max-width: 30rem;
-  margin-block: 0 2.5em;
+  margin-block: 0 1.5em;
   line-height: 1.28;
 }
 
@@ -268,7 +239,7 @@ body {
 }
 
 .report-title {
-  padding-top: 1.9em;
+  padding-top: 1em;
 }
 
 .research-index {
@@ -396,4 +367,43 @@ body {
   .paper-browser.report-document {
     margin-block: 0;
   }
+}
+
+.site-masthead nav a,
+.account-menu > summary {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-masthead nav a:hover,
+.account-menu > summary:hover,
+.account-menu[open] > summary {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.account-menu > summary {
+  display: block;
+  cursor: pointer;
+  list-style: none;
+}
+
+.account-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-menu-panel {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 100%;
+  inset-inline-end: 0;
+  box-sizing: border-box;
+  width: min(100%, 29rem);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.account-menu-panel .auth-panel {
+  margin-top: 0;
 }

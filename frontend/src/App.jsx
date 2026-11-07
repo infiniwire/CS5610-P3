@@ -29,12 +29,6 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  function openAccount(event) {
-    event.preventDefault();
-    accountMenu.current.open = true;
-    accountToggle.current.focus();
-  }
-
   const masthead = (
     <header className="site-masthead">
       <a className="site-wordmark" href="/">
@@ -91,18 +85,15 @@ export default function App() {
         </header>
 
         <p className="report-abstract" id="abstract">
-          <span>Abstract.</span> PaperPulse indexes work published in 2026 by researchers affiliated
-          with U.S. and Canadian universities. We use OpenAlex data to organize publications by
-          institution, publication month, and citation count.
+          <span>Abstract.</span> PaperPulse uses OpenAlex records to explore 2026 research from U.S.
+          and Canadian universities by institution, topic, publication date, and citations.
         </p>
 
         <section className="report-section" aria-labelledby="introduction-heading">
-          <h2 id="introduction-heading">1. Introduction</h2>
+          <h2 id="introduction-heading">1. Introduction and goal</h2>
           <p>
-            The <a href="/papers">paper index</a> lets readers browse 2026 publications by
-            university and publication month. Each entry lists the authors, institutional
-            affiliations, publication date, and citation count, and links to its source record in
-            OpenAlex{" "}
+            Our goal is to make university research easier to discover and compare. Browse the{" "}
+            <a href="/papers">paper index</a> by university or month, using OpenAlex records{" "}
             <a className="report-citation" href="#ref-openalex">
               [1]
             </a>
@@ -110,27 +101,8 @@ export default function App() {
           </p>
         </section>
 
-        <section className="report-section" aria-labelledby="account-section-heading">
-          <h2 id="account-section-heading">2. User Login</h2>
-          <p>
-            Use the{" "}
-            <a href="#account" onClick={openAccount}>
-              Account menu
-            </a>{" "}
-            to sign in or create an account.
-          </p>
-        </section>
-
-        <section className="report-section" aria-labelledby="goal-heading">
-          <h2 id="goal-heading">3. Our goal</h2>
-          <p>
-            Our goal is to make university research easier to discover and compare. A reader can
-            start with a particular institution and time period, then consult individual papers or
-            repeat the search for another institution.
-          </p>
-        </section>
+        <DatasetAnalysis />
       </ReportPage>
-      <DatasetAnalysis />
     </main>
   );
 }

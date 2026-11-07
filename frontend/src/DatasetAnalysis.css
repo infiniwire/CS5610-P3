@@ -21,7 +21,7 @@
 }
 
 .dataset-table :is(th, td) {
-  padding: 0.2em 0.75em;
+  padding: 0.2em 0.4em;
 }
 
 .dataset-table tbody th {
@@ -35,4 +35,31 @@
 
 .dataset-table tfoot {
   font-weight: 700;
+}
+
+.dataset-overview-tables {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+  margin: 1em 0;
+}
+
+.dataset-overview-tables .dataset-table {
+  width: 100%;
+  margin: 0;
+}
+
+.report-data-notes p {
+  line-height: 1.35;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.report-data-notes p + p {
+  margin-top: 0.5em;
+}
+
+.report-note-label {
+  font-variant-caps: small-caps;
 }
