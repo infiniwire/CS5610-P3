@@ -93,8 +93,9 @@ app.use(
   createSavedPaperRouter(app.locals.db.collection("savedPapers"), papers),
 );
 app.use(express.static(frontend));
-app.get(["/papers", "/analysis", "/rankings", "/saved-papers"], (_req, res) =>
-  res.sendFile("index.html", { root: frontend }),
+app.get(
+  ["/papers", "/analysis", "/rankings", "/saved-papers", "/my-topics", "/settings"],
+  (_req, res) => res.sendFile("index.html", { root: frontend }),
 );
 const server = app.listen(port, "0.0.0.0", async (error) => {
   if (error) {

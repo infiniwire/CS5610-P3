@@ -1,0 +1,50 @@
+.account-menu {
+  position: relative;
+}
+.account-dropdown {
+  position: absolute;
+  z-index: 30;
+  top: 100%;
+  right: 0;
+  min-width: 11rem;
+  padding-top: 0.5rem;
+}
+.account-dropdown ul {
+  margin: 0;
+  padding: 0.3rem 0;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  box-shadow: 0 5px 15px #211d1912;
+  list-style: none;
+}
+.site-masthead nav .account-dropdown a,
+.paper-browser .account-dropdown button {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  padding: 0.45rem 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.site-masthead nav .account-dropdown a:hover,
+.site-masthead nav .account-dropdown a:focus-visible,
+.paper-browser .account-dropdown button:hover,
+.paper-browser .account-dropdown button:focus-visible {
+  background: #f3efe8;
+  color: var(--accent);
+}
+.site-masthead .account-trigger[data-active="true"],
+.site-masthead nav .account-dropdown a[aria-current="page"] {
+  color: var(--accent);
+}
+.account-menu-separator {
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid var(--rule);
+}

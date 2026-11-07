@@ -60,20 +60,6 @@ export default function AuthPanel({ headingId, open, onUserChange, onSignedIn })
     }
   }
 
-  async function signOut() {
-    setPending(true);
-    setError("");
-    try {
-      await authRequest("logout", { body: {} });
-      setUser(null);
-      onUserChange?.(null);
-      setMode("login");
-    } catch (requestError) {
-      setError(requestError.message);
-    } finally {
-      setPending(false);
-    }
-  }
   const registering = mode === "register";
 
   return (
@@ -86,9 +72,7 @@ export default function AuthPanel({ headingId, open, onUserChange, onSignedIn })
           <p>
             Signed in as <strong>{user.email}</strong>
           </p>
-          <button type="button" onClick={signOut} disabled={pending}>
-            Sign out
-          </button>
+          <a href="/settings">Settings</a>
         </div>
       ) : (
         <>

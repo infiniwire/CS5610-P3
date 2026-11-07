@@ -1,6 +1,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import AuthDialog from "./AuthDialog.jsx";
-
+import AccountMenu from "./AccountMenu.jsx";
+import SignOutDialog from "./SignOutDialog.jsx";
 import DatasetAnalysis from "./DatasetAnalysis.jsx";
 import PaperIndex from "./PaperIndex.jsx";
 import AnalysisPage from "./AnalysisPage.jsx";
@@ -8,7 +9,8 @@ import RankingsPage from "./RankingsPage.jsx";
 import ReportPage from "./ReportPage.jsx";
 import ProjectFooter from "./ProjectFooter.jsx";
 import SavedPapersPage from "./SavedPapersPage.jsx";
-
+import MyTopicsPage from "./MyTopicsPage.jsx";
+import SettingsPage from "./SettingsPage.jsx";
 import { ReaderContext } from "./ReaderContext.js";
 import "./App.css";
 
@@ -17,10 +19,17 @@ export default function App() {
   const isAnalysisPage = /^\/analysis\/?$/i.test(window.location.pathname);
   const isRankingsPage = /^\/rankings\/?$/i.test(window.location.pathname);
   const isSavedPage = /^\/saved-papers\/?$/i.test(window.location.pathname);
-
-  const isIndexPage = isPapersPage || isAnalysisPage || isRankingsPage || isSavedPage;
+  const isTopicsPage = /^\/my-topics\/?$/i.test(window.location.pathname);
+  const isSettingsPage = /^\/settings\/?$/i.test(window.location.pathname);
+  const isIndexPage =
+    isPapersPage ||
+    isAnalysisPage ||
+    isRankingsPage ||
+    isSavedPage ||
+    isTopicsPage ||
+    isSettingsPage;
   const [loginOpen, setLoginOpen] = useState(false);
-
+  const [signOutOpen, setSignOutOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [authChecking, setAuthChecking] = useState(true);
   const reportDocument = useRef(null);
@@ -73,22 +82,23 @@ export default function App() {
           <a href="/rankings" aria-current={isRankingsPage ? "page" : undefined}>
             Rankings
           </a>
-          <a href="/saved-papers" aria-current={isSavedPage ? "page" : undefined}>
-            Saved papers
-          </a>
-          <button
-            type="button"
-            className="site-login-button"
-            aria-haspopup="dialog"
-            aria-controls="login-dialog"
-            aria-expanded={loginOpen}
-            onClick={() => setLoginOpen(true)}
-          >
-            {currentUser ? "Account" : "Login"}
-          </button>
+          <AccountMenu
+            key={currentUser?.id ?? "guest"}
+            loginOpen={loginOpen}
+            onRequestSignOut={() => setSignOutOpen(true)}
+          />
         </nav>
       </header>
       <AuthDialog open={loginOpen} onClose={() => setLoginOpen(false)} onUserChange={userChanged} />
+      {signOutOpen && currentUser && (
+        <SignOutDialog
+          onCancel={() => setSignOutOpen(false)}
+          onSignedOut={() => {
+            userChanged(null);
+            setSignOutOpen(false);
+          }}
+        />
+      )}
     </>
   );
 
@@ -103,6 +113,10 @@ export default function App() {
             <RankingsPage />
           ) : isSavedPage ? (
             <SavedPapersPage key={currentUser?.id ?? "guest"} />
+          ) : isTopicsPage ? (
+            <MyTopicsPage />
+          ) : isSettingsPage ? (
+            <SettingsPage />
           ) : (
             <PaperIndex />
           )}
