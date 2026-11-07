@@ -1,0 +1,41 @@
+.saved-paper-entry {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule);
+  overflow-wrap: anywhere;
+}
+.saved-paper-entry h2 {
+  margin: 0 0 0.4rem;
+  font-size: var(--font-section);
+  line-height: 1.35;
+}
+.paper-browser .saved-paper-title {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.saved-paper-entry p {
+  margin: 0.3rem 0;
+}
+.saved-paper-meta {
+  color: var(--muted-ink);
+  font-size: var(--font-small);
+  font-style: italic;
+}
+.saved-notes-preview {
+  white-space: pre-wrap;
+}
+.saved-entry-notes {
+  margin-top: 0.7rem;
+}
+.saved-entry-notes > summary {
+  width: fit-content;
+  color: var(--muted-ink);
+  cursor: pointer;
+  font-style: italic;
+}

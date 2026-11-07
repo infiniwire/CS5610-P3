@@ -8,6 +8,7 @@ import { createDatasetSummaryCache } from "./dataset-summary.js";
 import { createAnalysisCache } from "./analysis.js";
 import { createRankingsCache } from "./rankings.js";
 import { createPaperRouter, ensurePaperIndexes } from "./papers.js";
+import { createSavedPaperRouter, ensureSavedPaperIndexes } from "./saved-papers.js";
 
 const envFile = new URL("../.env", import.meta.url);
 if (existsSync(envFile)) {
@@ -74,7 +75,11 @@ app.get("/api/rankings", async (_req, res) => {
 });
 
 try {
-  await Promise.all([ensurePaperIndexes(papers), configureAuth(app, client, sessionSecret)]);
+  await Promise.all([
+    ensurePaperIndexes(papers),
+    ensureSavedPaperIndexes(app.locals.db.collection("savedPapers")),
+    configureAuth(app, client, sessionSecret),
+  ]);
 } catch (error) {
   console.error(`Could not initialize PaperPulse (${error.name}).`);
   await client.close();
@@ -83,8 +88,12 @@ try {
 const port = Number(process.env.PORT ?? 3000);
 const frontend = fileURLToPath(new URL("../frontend/dist/", import.meta.url));
 
+app.use(
+  "/api/saved-papers",
+  createSavedPaperRouter(app.locals.db.collection("savedPapers"), papers),
+);
 app.use(express.static(frontend));
-app.get(["/papers", "/analysis", "/rankings"], (_req, res) =>
+app.get(["/papers", "/analysis", "/rankings", "/saved-papers"], (_req, res) =>
   res.sendFile("index.html", { root: frontend }),
 );
 const server = app.listen(port, "0.0.0.0", async (error) => {

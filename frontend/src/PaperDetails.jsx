@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
+import SavedPaperControls from "./SavedPaperControls.jsx";
 import "./PaperDetails.css";
 
 const types = {
@@ -29,7 +29,7 @@ function ExternalLink({ href, children }) {
   );
 }
 
-export default function PaperDetails({ selectedPaper, onClose }) {
+export default function PaperDetails({ selectedPaper, onClose, onSavedChange }) {
   const dialog = useRef(null);
   const [paper, setPaper] = useState(null);
   const [error, setError] = useState("");
@@ -104,7 +104,7 @@ export default function PaperDetails({ selectedPaper, onClose }) {
           </button>
         </p>
       )}
-
+      <SavedPaperControls openAlexId={selectedPaper.openAlexId} onSavedChange={onSavedChange} />
       {paper && (
         <>
           {paper.isRetracted && (

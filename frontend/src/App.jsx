@@ -7,6 +7,7 @@ import AnalysisPage from "./AnalysisPage.jsx";
 import RankingsPage from "./RankingsPage.jsx";
 import ReportPage from "./ReportPage.jsx";
 import ProjectFooter from "./ProjectFooter.jsx";
+import SavedPapersPage from "./SavedPapersPage.jsx";
 
 import { ReaderContext } from "./ReaderContext.js";
 import "./App.css";
@@ -15,8 +16,9 @@ export default function App() {
   const isPapersPage = /^\/papers\/?$/i.test(window.location.pathname);
   const isAnalysisPage = /^\/analysis\/?$/i.test(window.location.pathname);
   const isRankingsPage = /^\/rankings\/?$/i.test(window.location.pathname);
+  const isSavedPage = /^\/saved-papers\/?$/i.test(window.location.pathname);
 
-  const isIndexPage = isPapersPage || isAnalysisPage || isRankingsPage;
+  const isIndexPage = isPapersPage || isAnalysisPage || isRankingsPage || isSavedPage;
   const [loginOpen, setLoginOpen] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -71,6 +73,9 @@ export default function App() {
           <a href="/rankings" aria-current={isRankingsPage ? "page" : undefined}>
             Rankings
           </a>
+          <a href="/saved-papers" aria-current={isSavedPage ? "page" : undefined}>
+            Saved papers
+          </a>
           <button
             type="button"
             className="site-login-button"
@@ -92,7 +97,15 @@ export default function App() {
       <ReaderContext.Provider value={reader}>
         <main className={`paper-browser${isAnalysisPage ? " analysis-document" : ""}`} id="top">
           {masthead}
-          {isAnalysisPage ? <AnalysisPage /> : isRankingsPage ? <RankingsPage /> : <PaperIndex />}
+          {isAnalysisPage ? (
+            <AnalysisPage />
+          ) : isRankingsPage ? (
+            <RankingsPage />
+          ) : isSavedPage ? (
+            <SavedPapersPage key={currentUser?.id ?? "guest"} />
+          ) : (
+            <PaperIndex />
+          )}
           <footer className="site-footer">
             <span>PaperPulse · 2026</span>
             <a href="#top">Back to top</a>

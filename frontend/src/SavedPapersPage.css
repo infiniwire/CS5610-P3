@@ -1,0 +1,35 @@
+.saved-page-intro {
+  margin: 0.75rem 0 1.25rem;
+  color: var(--muted-ink);
+  font-style: italic;
+}
+.saved-page-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ink);
+}
+.saved-page-filter label {
+  display: grid;
+  gap: 0.3rem;
+}
+.saved-page-filter p {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: var(--font-small);
+}
+.saved-paper-list {
+  margin: 0;
+  padding-left: 2.35rem;
+}
+.saved-paper-list > li::marker {
+  content: "[" counter(list-item) "]  ";
+  color: var(--muted-ink);
+  font-size: var(--font-small);
+}
+.saved-sign-in {
+  padding: 0.75rem 0 2rem;
+}

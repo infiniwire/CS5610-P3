@@ -1,0 +1,63 @@
+.saved-paper-editor {
+  margin-top: 0.75rem;
+}
+.saved-paper-editor fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.saved-paper-editor label {
+  display: grid;
+  gap: 0.3rem;
+  margin-bottom: 0.7rem;
+}
+.saved-paper-editor select {
+  width: min(100%, 15rem);
+}
+.saved-paper-editor textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: 6rem;
+  padding: 0.5rem;
+  resize: vertical;
+  border: 1px solid #9c9082;
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.5;
+}
+.saved-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.saved-paper-editor .saved-editor-hint {
+  margin: 0.3rem 0 0.75rem;
+  color: var(--muted-ink);
+  font-size: var(--font-small);
+  font-style: italic;
+}
+.paper-browser .saved-remove-button {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.saved-remove-confirm {
+  margin-top: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule);
+}
+.saved-remove-confirm p {
+  margin: 0 0 0.5rem;
+}
+.saved-editor-error {
+  color: var(--accent);
+}
