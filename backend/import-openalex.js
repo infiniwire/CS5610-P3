@@ -11,7 +11,9 @@ const validDate = (value) =>
   new Date(value).toISOString().slice(0, 10) === value;
 
 if (!validDate(from) || !validDate(through) || from > through) {
-  console.error("Usage: npm run import:openalex -- <end date in 2026> [start date in 2026] [--additional-types]");
+  console.error(
+    "Usage: npm run import:openalex -- <end date in 2026> [start date in 2026] [--additional-types]",
+  );
   process.exit(1);
 }
 
@@ -36,21 +38,37 @@ const batches = [
 ];
 // Publisher metadata verified by DOI for works with a missing OpenAlex title.
 const verifiedMetadata = new Map([
-  ["https://openalex.org/W7154034643", {
-    doi: "https://doi.org/10.15036/arerugi.75.102",
-    title: "C1-INH正常遺伝性血管性浮腫：診断，病態生理，及び治療に関する最新の国際的コンセンサスペーパー",
-    publicationDate: "2026-04-10",
-    url: "https://www.jstage.jst.go.jp/article/arerugi/75/2/75_102/_article/-char/ja",
-  }],
-  ["https://openalex.org/W7161034666", {
-    doi: "https://doi.org/10.46747/cfp.7205e147",
-    title: "Les meilleures études en 2025 adaptées aux soins primaires",
-    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC13171045/",
-  }],
+  [
+    "https://openalex.org/W7154034643",
+    {
+      doi: "https://doi.org/10.15036/arerugi.75.102",
+      title:
+        "C1-INH正常遺伝性血管性浮腫：診断，病態生理，及び治療に関する最新の国際的コンセンサスペーパー",
+      publicationDate: "2026-04-10",
+      url: "https://www.jstage.jst.go.jp/article/arerugi/75/2/75_102/_article/-char/ja",
+    },
+  ],
+  [
+    "https://openalex.org/W7161034666",
+    {
+      doi: "https://doi.org/10.46747/cfp.7205e147",
+      title: "Les meilleures études en 2025 adaptées aux soins primaires",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC13171045/",
+    },
+  ],
 ]);
 const fields = [
-  "id", "display_name", "doi", "publication_date", "type", "authorships",
-  "primary_topic", "topics", "cited_by_count", "primary_location", "is_retracted",
+  "id",
+  "display_name",
+  "doi",
+  "publication_date",
+  "type",
+  "authorships",
+  "primary_topic",
+  "topics",
+  "cited_by_count",
+  "primary_location",
+  "is_retracted",
 ].join(",");
 const api = new URL("https://api.openalex.org");
 const requestSpacingMs = additionalOnly ? 220 : 45;
@@ -91,7 +109,9 @@ async function getOpenAlex(path, params) {
       const retryAfter = Number(response.headers.get("retry-after"));
       const waitMs = retryAfter > 0 ? retryAfter * 1000 : 1000 * 2 ** attempt;
       if (Date.now() >= pauseUntil && waitMs >= 5000) {
-        console.log(`OpenAlex is rate limiting requests. Retrying in ${Math.ceil(waitMs / 1000)}s.`);
+        console.log(
+          `OpenAlex is rate limiting requests. Retrying in ${Math.ceil(waitMs / 1000)}s.`,
+        );
       }
       pauseUntil = Math.max(pauseUntil, Date.now() + waitMs);
     } else if (response.status >= 500 || response.status === 408) {
@@ -122,7 +142,8 @@ async function fetchEducationInstitutions() {
     }
     cursor = page.results.length ? page.meta.next_cursor : null;
   } while (cursor);
-  if (!institutions.size) throw new Error("OpenAlex returned an empty education institution catalog.");
+  if (!institutions.size)
+    throw new Error("OpenAlex returned an empty education institution catalog.");
   return institutions;
 }
 
@@ -163,8 +184,14 @@ function normalizeTopic(topic) {
 async function importDay(day, saved, batch, education, papers, checkpoints) {
   const id = batch.checkpointPrefix + day;
   const state = saved ?? {
-    day, cursor: "*", expected: null, fetched: 0, matched: 0,
-    unrelated: 0, invalid: 0, expandedAuthorships: 0,
+    day,
+    cursor: "*",
+    expected: null,
+    fetched: 0,
+    matched: 0,
+    unrelated: 0,
+    invalid: 0,
+    expandedAuthorships: 0,
   };
   delete state._id;
   const publicationFilter = batch.types.includes("article")
@@ -260,12 +287,16 @@ async function importDay(day, saved, batch, education, papers, checkpoints) {
 
 async function importBatch(batch, days, education, papers, checkpoints) {
   const saved = new Map(
-    (await checkpoints.find({
-      _id: {
-        $gte: batch.checkpointPrefix + from,
-        $lte: batch.checkpointPrefix + through,
-      },
-    }).toArray()).map((state) => [state.day, state]),
+    (
+      await checkpoints
+        .find({
+          _id: {
+            $gte: batch.checkpointPrefix + from,
+            $lte: batch.checkpointPrefix + through,
+          },
+        })
+        .toArray()
+    ).map((state) => [state.day, state]),
   );
   const pending = days.filter((day) => !saved.get(day)?.complete);
   console.log(`${batch.name}: ${pending.length}/${days.length} dates pending.`);
@@ -273,36 +304,40 @@ async function importBatch(batch, days, education, papers, checkpoints) {
   let nextDay = 0;
   let completed = days.length - pending.length;
   let failure;
-  await Promise.all(Array.from({ length: Math.min(workers, pending.length) }, async () => {
-    while (!failure && nextDay < pending.length) {
-      const day = pending[nextDay++];
-      try {
-        const state = await importDay(day, saved.get(day), batch, education, papers, checkpoints);
-        saved.set(day, state);
-        completed++;
-        if (completed % 10 === 0 || completed === days.length) {
-          console.log(`Completed ${completed}/${days.length} dates.`);
+  await Promise.all(
+    Array.from({ length: Math.min(workers, pending.length) }, async () => {
+      while (!failure && nextDay < pending.length) {
+        const day = pending[nextDay++];
+        try {
+          const state = await importDay(day, saved.get(day), batch, education, papers, checkpoints);
+          saved.set(day, state);
+          completed++;
+          if (completed % 10 === 0 || completed === days.length) {
+            console.log(`Completed ${completed}/${days.length} dates.`);
+          }
+        } catch (error) {
+          failure ??= error;
         }
-      } catch (error) {
-        failure ??= error;
       }
-    }
-  }));
+    }),
+  );
   if (failure) throw failure;
 
   const imported = [...saved.values()];
-  console.log(JSON.stringify({
-    batch: batch.name,
-    completedDates: completed,
-    candidates: imported.reduce((sum, day) => sum + day.fetched, 0),
-    matched: imported.reduce((sum, day) => sum + day.matched, 0),
-    excludedAffiliation: imported.reduce((sum, day) => sum + day.unrelated, 0),
-    invalidOrChanged: imported.reduce((sum, day) => sum + day.invalid, 0),
-    expandedAuthorships: imported.reduce((sum, day) => sum + day.expandedAuthorships, 0),
-    datesWithCountMismatch: imported
-      .filter((day) => day.fetched !== day.lastCount)
-      .map(({ day, fetched, lastCount }) => ({ day, fetched, lastCount })),
-  }));
+  console.log(
+    JSON.stringify({
+      batch: batch.name,
+      completedDates: completed,
+      candidates: imported.reduce((sum, day) => sum + day.fetched, 0),
+      matched: imported.reduce((sum, day) => sum + day.matched, 0),
+      excludedAffiliation: imported.reduce((sum, day) => sum + day.unrelated, 0),
+      invalidOrChanged: imported.reduce((sum, day) => sum + day.invalid, 0),
+      expandedAuthorships: imported.reduce((sum, day) => sum + day.expandedAuthorships, 0),
+      datesWithCountMismatch: imported
+        .filter((day) => day.fetched !== day.lastCount)
+        .map(({ day, fetched, lastCount }) => ({ day, fetched, lastCount })),
+    }),
+  );
 }
 
 let client;

@@ -70,13 +70,19 @@ export default function AuthPanel() {
   const registering = mode === "register";
   return (
     <section className="auth-panel" aria-labelledby="account-heading">
-      <h3 id="account-heading">{user ? "Your account" : registering ? "Create an account" : "Sign in"}</h3>
+      <h3 id="account-heading">
+        {user ? "Your account" : registering ? "Create an account" : "Sign in"}
+      </h3>
       {checking ? (
         <p role="status">Checking sign-in status…</p>
       ) : user ? (
         <div className="auth-account">
-          <p>Signed in as <strong>{user.email}</strong></p>
-          <button type="button" onClick={signOut} disabled={pending}>Sign out</button>
+          <p>
+            Signed in as <strong>{user.email}</strong>
+          </p>
+          <button type="button" onClick={signOut} disabled={pending}>
+            Sign out
+          </button>
         </div>
       ) : (
         <>
@@ -101,15 +107,23 @@ export default function AuthPanel() {
             </button>
           </form>
           {registering && <p className="auth-hint">Use at least 8 characters for your password.</p>}
-          <button type="button" disabled={pending} onClick={() => {
-            setMode(registering ? "login" : "register");
-            setError("");
-          }}>
+          <button
+            type="button"
+            disabled={pending}
+            onClick={() => {
+              setMode(registering ? "login" : "register");
+              setError("");
+            }}
+          >
             {registering ? "Back to sign in" : "Create an account"}
           </button>
         </>
       )}
-      {error && <p className="auth-error" role="alert">{error}</p>}
+      {error && (
+        <p className="auth-error" role="alert">
+          {error}
+        </p>
+      )}
     </section>
   );
 }

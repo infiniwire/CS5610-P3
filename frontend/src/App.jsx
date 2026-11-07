@@ -17,7 +17,10 @@ export default function App() {
     const sheet = report.querySelector(".report-sheet");
 
     function updateScale() {
-      report.style.setProperty("--sheet-scale", report.getBoundingClientRect().width / sheet.offsetWidth);
+      report.style.setProperty(
+        "--sheet-scale",
+        report.getBoundingClientRect().width / sheet.offsetWidth,
+      );
     }
 
     updateScale();
@@ -34,10 +37,16 @@ export default function App() {
 
   const masthead = (
     <header className="site-masthead">
-      <a className="site-wordmark" href="/">PaperPulse</a>
+      <a className="site-wordmark" href="/">
+        PaperPulse
+      </a>
       <nav aria-label="Site navigation">
-        <a href="/" aria-current={isPapersPage ? undefined : "page"}>Home</a>
-        <a href="/papers" aria-current={isPapersPage ? "page" : undefined}>Papers</a>
+        <a href="/" aria-current={isPapersPage ? undefined : "page"}>
+          Home
+        </a>
+        <a href="/papers" aria-current={isPapersPage ? "page" : undefined}>
+          Papers
+        </a>
         <details
           className="account-menu"
           id="account"
@@ -92,25 +101,34 @@ export default function App() {
           <p>
             The <a href="/papers">paper index</a> lets readers browse 2026 publications by
             university and publication month. Each entry lists the authors, institutional
-            affiliations, publication date, and citation count, and links to its source record
-            in OpenAlex <a className="report-citation" href="#ref-openalex">[1]</a>.
+            affiliations, publication date, and citation count, and links to its source record in
+            OpenAlex{" "}
+            <a className="report-citation" href="#ref-openalex">
+              [1]
+            </a>
+            .
           </p>
         </section>
 
         <section className="report-section" aria-labelledby="account-section-heading">
           <h2 id="account-section-heading">2. User Login</h2>
-          <p>Use the <a href="#account" onClick={openAccount}>Account menu</a> to sign in or create an account.</p>
+          <p>
+            Use the{" "}
+            <a href="#account" onClick={openAccount}>
+              Account menu
+            </a>{" "}
+            to sign in or create an account.
+          </p>
         </section>
 
         <section className="report-section" aria-labelledby="goal-heading">
           <h2 id="goal-heading">3. Our goal</h2>
           <p>
             Our goal is to make university research easier to discover and compare. A reader can
-            start with a particular institution and time period, then consult individual papers
-            or repeat the search for another institution.
+            start with a particular institution and time period, then consult individual papers or
+            repeat the search for another institution.
           </p>
         </section>
-
       </ReportPage>
       <DatasetAnalysis />
     </main>

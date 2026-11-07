@@ -10,22 +10,33 @@ export default function PaperList({ papers, start }) {
   return (
     <ol className="paper-list" start={start}>
       {papers.map((paper) => {
-        const authors = paper.authors.slice(0, 3).map(({ name }) => name).filter(Boolean);
+        const authors = paper.authors
+          .slice(0, 3)
+          .map(({ name }) => name)
+          .filter(Boolean);
         const date = new Date(paper.publicationDate);
 
         return (
           <li key={paper.openAlexId}>
             <article>
               <h3>
-                <a href={paper.openAlexId} target="_blank" rel="noreferrer">{paper.title}</a>
+                <a href={paper.openAlexId} target="_blank" rel="noreferrer">
+                  {paper.title}
+                </a>
               </h3>
               {authors.length > 0 && (
-                <p>{authors.join(", ")}{paper.authors.length > 3 && ", et al."}</p>
+                <p>
+                  {authors.join(", ")}
+                  {paper.authors.length > 3 && ", et al."}
+                </p>
               )}
               <p>{paper.institutions.map(({ name }) => name).join(" · ")}</p>
               <p className="paper-metadata">
                 <time dateTime={paper.publicationDate.slice(0, 10)}>{dateFormat.format(date)}</time>
-                <span>{numberFormat.format(paper.citedByCount)} {paper.citedByCount === 1 ? "citation" : "citations"}</span>
+                <span>
+                  {numberFormat.format(paper.citedByCount)}{" "}
+                  {paper.citedByCount === 1 ? "citation" : "citations"}
+                </span>
               </p>
             </article>
           </li>

@@ -66,7 +66,12 @@ function createAuthRouter(auth, users, cookie) {
     legacyHeaders: false,
     message: { error: "Too many attempts. Try again later." },
   });
-  const credentials = [limitAttempts, requireJson, express.json({ limit: "8kb" }), validateCredentials];
+  const credentials = [
+    limitAttempts,
+    requireJson,
+    express.json({ limit: "8kb" }),
+    validateCredentials,
+  ];
 
   router.use((_req, res, next) => {
     res.set("Cache-Control", "no-store");
@@ -134,17 +139,19 @@ export async function configureAuth(app, client, secret) {
   ]);
 
   const auth = new passport.Passport();
-  auth.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
-    try {
-      const user = await users.findOne({ email }, { projection: { email: 1, passwordHash: 1 } });
-      const { salt, hash } = user?.passwordHash ?? emptyPasswordHash;
-      const candidate = await passwordKey(password, salt);
-      const matches = timingSafeEqual(candidate, Buffer.from(hash, "hex"));
-      return done(null, matches && user ? user : false);
-    } catch (error) {
-      return done(error);
-    }
-  }));
+  auth.use(
+    new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
+      try {
+        const user = await users.findOne({ email }, { projection: { email: 1, passwordHash: 1 } });
+        const { salt, hash } = user?.passwordHash ?? emptyPasswordHash;
+        const candidate = await passwordKey(password, salt);
+        const matches = timingSafeEqual(candidate, Buffer.from(hash, "hex"));
+        return done(null, matches && user ? user : false);
+      } catch (error) {
+        return done(error);
+      }
+    }),
+  );
 
   auth.serializeUser((user, done) => done(null, user._id.toHexString()));
   auth.deserializeUser(async (id, done) => {
@@ -158,22 +165,28 @@ export async function configureAuth(app, client, secret) {
     }
   });
 
-  const secure = process.env.NODE_ENV === "production" || Boolean(process.env.RAILWAY_ENVIRONMENT_ID);
+  const secure =
+    process.env.NODE_ENV === "production" || Boolean(process.env.RAILWAY_ENVIRONMENT_ID);
   if (secure) app.set("trust proxy", 1);
   const cookie = { httpOnly: true, sameSite: "lax", secure, path: "/" };
-  app.use("/api", session({
-    name: cookieName,
-    secret,
-    store: MongoStore.create({
-      client,
-      dbName: db.databaseName,
-      autoRemove: "disabled",
-      // The cookie expires at a fixed time, so reads need not extend the session.
-      touchAfter: sessionLifetime,
+  app.use(
+    "/api",
+    session({
+      name: cookieName,
+      secret,
+      store: MongoStore.create({
+        client,
+        dbName: db.databaseName,
+        autoRemove: "disabled",
+        // The cookie expires at a fixed time, so reads need not extend the session.
+        touchAfter: sessionLifetime,
+      }),
+      resave: false,
+      saveUninitialized: false,
+      cookie: { ...cookie, maxAge: sessionLifetime * 1000 },
     }),
-    resave: false,
-    saveUninitialized: false,
-    cookie: { ...cookie, maxAge: sessionLifetime * 1000 },
-  }), auth.initialize(), auth.session());
+    auth.initialize(),
+    auth.session(),
+  );
   app.use("/api/auth", createAuthRouter(auth, users, cookie));
 }

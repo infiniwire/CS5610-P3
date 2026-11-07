@@ -34,7 +34,10 @@ body {
   margin: 0;
   background: #eeebe4;
   color: var(--ink);
-  font: 1.0625rem/1.5 "Latin Modern Roman", Georgia, serif;
+  font:
+    1.0625rem/1.5 "Latin Modern Roman",
+    Georgia,
+    serif;
 }
 
 .paper-browser {

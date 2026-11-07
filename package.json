@@ -2,7 +2,7 @@
   "name": "paperpulse",
   "private": true,
   "engines": {
-    "node": "^22.12.0"
+    "node": "^22.13.0"
   },
   "workspaces": [
     "frontend",
@@ -12,9 +12,25 @@
     "dev": "concurrently --kill-others --success first --names backend,frontend \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
     "import:openalex": "node --env-file=.env backend/import-openalex.js",
     "build": "npm run build --workspace frontend",
-    "start": "npm start --workspace backend"
+    "start": "npm start --workspace backend",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "check": "npm run lint && npm run format:check"
+  },
+  "overrides": {
+    "eslint": {
+      "minimatch": "^11.0.1"
+    }
   },
   "devDependencies": {
-    "concurrently": "^9.2.5"
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^9.2.5",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "prettier": "3.9.10"
   }
 }

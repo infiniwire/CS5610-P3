@@ -28,7 +28,9 @@ const snapshotDate = new Intl.DateTimeFormat("en-US", {
 function SummaryTable({ number, caption, category, rows, total }) {
   return (
     <table className="dataset-table">
-      <caption><span>Table {number}.</span> {caption}</caption>
+      <caption>
+        <span>Table {number}.</span> {caption}
+      </caption>
       <thead>
         <tr>
           <th scope="col">{category}</th>
@@ -94,10 +96,13 @@ export default function DatasetAnalysis() {
             <p>
               The index contains {count.format(summary.total)} records
               {summary.earliest && summary.latest && (
-                <> with publication dates from {date.format(new Date(summary.earliest))} to{" "}
-                  {date.format(new Date(summary.latest))}</>
-              )}.
-              Table 1 reports the composition of the corpus by publication type.
+                <>
+                  {" "}
+                  with publication dates from {date.format(new Date(summary.earliest))} to{" "}
+                  {date.format(new Date(summary.latest))}
+                </>
+              )}
+              . Table 1 reports the composition of the corpus by publication type.
             </p>
             <SummaryTable
               number={1}
@@ -117,9 +122,9 @@ export default function DatasetAnalysis() {
         )}
         <h3>Affiliation by country</h3>
         <p>
-          Table 2 classifies each work by the U.S. and Canadian institutions listed in
-          its author affiliations. A work with affiliations in both countries contributes
-          one record to the collaboration group.
+          Table 2 classifies each work by the U.S. and Canadian institutions listed in its author
+          affiliations. A work with affiliations in both countries contributes one record to the
+          collaboration group.
         </p>
         {affiliationTotal > 0 && (
           <>
@@ -140,28 +145,44 @@ export default function DatasetAnalysis() {
             </p>
             {summary.total > affiliationTotal && (
               <p>
-                Table 2 excludes {count.format(summary.total - affiliationTotal)} records with
-                no recorded U.S. or Canadian affiliation.
+                Table 2 excludes {count.format(summary.total - affiliationTotal)} records with no
+                recorded U.S. or Canadian affiliation.
               </p>
             )}
           </>
         )}
         {failed && <p role="status">Affiliation counts are temporarily unavailable.</p>}
         {!summary && !failed && <p role="status">Loading affiliation counts…</p>}
-        {summary && affiliationTotal === 0 && <p role="status">No records have a qualifying affiliation.</p>}
+        {summary && affiliationTotal === 0 && (
+          <p role="status">No records have a qualifying affiliation.</p>
+        )}
         <h3>Data coverage</h3>
         <p>
-          The index includes 2026 journal articles, reviews, conference papers, data papers,
-          and software papers from OpenAlex. Each work has at least one author affiliation
-          linked to a U.S. or Canadian education institution, directly or through its parent
-          institution. Each OpenAlex Work ID is counted once.
-          {summary?.latest && <> Publication dates run through {date.format(new Date(summary.latest))}.</>}
-          {summary?.calculatedAt && <> Statistics reflect the index as of {snapshotDate.format(new Date(summary.calculatedAt))}.</>}
+          The index includes 2026 journal articles, reviews, conference papers, data papers, and
+          software papers from OpenAlex. Each work has at least one author affiliation linked to a
+          U.S. or Canadian education institution, directly or through its parent institution. Each
+          OpenAlex Work ID is counted once.
+          {summary?.latest && (
+            <> Publication dates run through {date.format(new Date(summary.latest))}.</>
+          )}
+          {summary?.calculatedAt && (
+            <>
+              {" "}
+              Statistics reflect the index as of{" "}
+              {snapshotDate.format(new Date(summary.calculatedAt))}.
+            </>
+          )}
         </p>
       </section>
       <section className="report-footer" aria-labelledby="references-heading">
         <h2 id="references-heading">References</h2>
-        <p id="ref-openalex">[1] OpenAlex. <a href="https://openalex.org/"><em>OpenAlex scholarly index</em></a>.</p>
+        <p id="ref-openalex">
+          [1] OpenAlex.{" "}
+          <a href="https://openalex.org/">
+            <em>OpenAlex scholarly index</em>
+          </a>
+          .
+        </p>
       </section>
     </ReportPage>
   );

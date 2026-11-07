@@ -29,9 +29,10 @@ function parseQuery({ institution, month, sort = "citations_desc", page = "1" })
   const filter = {};
 
   if (institution !== undefined) {
-    const id = typeof institution === "string"
-      ? institution.match(/^(?:https:\/\/openalex\.org\/)?(I[1-9]\d*)$/)?.[1]
-      : undefined;
+    const id =
+      typeof institution === "string"
+        ? institution.match(/^(?:https:\/\/openalex\.org\/)?(I[1-9]\d*)$/)?.[1]
+        : undefined;
     if (!id) throw new Error("institution must be an OpenAlex institution ID.");
     filter["institutions.id"] = `https://openalex.org/${id}`;
   }
@@ -49,7 +50,11 @@ function parseQuery({ institution, month, sort = "citations_desc", page = "1" })
 
   const direction = citationSorts.get(sort);
   if (!direction) throw new Error("sort must be citations_desc or citations_asc.");
-  if (typeof page !== "string" || !/^[1-9]\d*$/.test(page) || !Number.isSafeInteger(Number(page) * pageSize)) {
+  if (
+    typeof page !== "string" ||
+    !/^[1-9]\d*$/.test(page) ||
+    !Number.isSafeInteger(Number(page) * pageSize)
+  ) {
     throw new Error("page must be a positive integer.");
   }
 
@@ -72,21 +77,23 @@ export function createPaperRouter(papers) {
 
     const { filter, direction, page } = query;
     try {
-      const results = await papers.find(filter, {
-        projection: {
-          _id: 0,
-          openAlexId: 1,
-          title: 1,
-          publicationDate: 1,
-          citedByCount: 1,
-          institutions: 1,
-          authors: { $slice: 4 },
-        },
-        sort: { citedByCount: direction, openAlexId: direction },
-        skip: (page - 1) * pageSize,
-        limit: pageSize + 1,
-        maxTimeMS: 10_000,
-      }).toArray();
+      const results = await papers
+        .find(filter, {
+          projection: {
+            _id: 0,
+            openAlexId: 1,
+            title: 1,
+            publicationDate: 1,
+            citedByCount: 1,
+            institutions: 1,
+            authors: { $slice: 4 },
+          },
+          sort: { citedByCount: direction, openAlexId: direction },
+          skip: (page - 1) * pageSize,
+          limit: pageSize + 1,
+          maxTimeMS: 10_000,
+        })
+        .toArray();
 
       return res.json({
         papers: results.slice(0, pageSize),
@@ -102,20 +109,25 @@ export function createPaperRouter(papers) {
 
   router.get("/institutions", async (_req, res) => {
     try {
-      institutionOptions ??= papers.aggregate([
-        { $project: { institutions: 1, _id: 0 } },
-        { $unwind: "$institutions" },
-        {
-          $group: {
-            _id: "$institutions.id",
-            name: { $max: "$institutions.name" },
-            country: { $first: "$institutions.country" },
-          },
-        },
-        { $match: { _id: { $type: "string" }, name: { $type: "string" } } },
-        { $sort: { name: 1, _id: 1 } },
-        { $project: { _id: 0, id: "$_id", name: 1, country: 1 } },
-      ], { maxTimeMS: 15_000 }).toArray();
+      institutionOptions ??= papers
+        .aggregate(
+          [
+            { $project: { institutions: 1, _id: 0 } },
+            { $unwind: "$institutions" },
+            {
+              $group: {
+                _id: "$institutions.id",
+                name: { $max: "$institutions.name" },
+                country: { $first: "$institutions.country" },
+              },
+            },
+            { $match: { _id: { $type: "string" }, name: { $type: "string" } } },
+            { $sort: { name: 1, _id: 1 } },
+            { $project: { _id: 0, id: "$_id", name: 1, country: 1 } },
+          ],
+          { maxTimeMS: 15_000 },
+        )
+        .toArray();
       return res.json({ institutions: await institutionOptions });
     } catch (error) {
       institutionOptions = undefined;
@@ -128,53 +140,62 @@ export function createPaperRouter(papers) {
     try {
       if (!datasetSummary || Date.now() >= summaryExpiresAt) {
         summaryExpiresAt = Infinity;
-        datasetSummary = papers.aggregate([
-          {
-            $set: {
-              affiliationCountries: {
-                $setIntersection: [{ $ifNull: ["$institutions.country", []] }, ["US", "CA"]],
+        datasetSummary = papers
+          .aggregate(
+            [
+              {
+                $set: {
+                  affiliationCountries: {
+                    $setIntersection: [{ $ifNull: ["$institutions.country", []] }, ["US", "CA"]],
+                  },
+                },
               },
-            },
-          },
-          {
-            $group: {
-              _id: { $ifNull: ["$type", "unknown"] },
-              count: { $sum: 1 },
-              earliest: { $min: "$publicationDate" },
-              latest: { $max: "$publicationDate" },
-              usOnly: { $sum: { $cond: [{ $eq: ["$affiliationCountries", ["US"]] }, 1, 0] } },
-              canadaOnly: { $sum: { $cond: [{ $eq: ["$affiliationCountries", ["CA"]] }, 1, 0] } },
-              collaboration: { $sum: { $cond: [{ $eq: [{ $size: "$affiliationCountries" }, 2] }, 1, 0] } },
-            },
-          },
-          { $sort: { count: -1, _id: 1 } },
-          {
-            $group: {
-              _id: null,
-              total: { $sum: "$count" },
-              earliest: { $min: "$earliest" },
-              latest: { $max: "$latest" },
-              types: { $push: { type: "$_id", count: "$count" } },
-              usOnly: { $sum: "$usOnly" },
-              canadaOnly: { $sum: "$canadaOnly" },
-              collaboration: { $sum: "$collaboration" },
-            },
-          },
-          {
-            $project: {
-              _id: 0,
-              total: 1,
-              earliest: 1,
-              latest: 1,
-              types: 1,
-              affiliations: {
-                usOnly: "$usOnly",
-                canadaOnly: "$canadaOnly",
-                collaboration: "$collaboration",
+              {
+                $group: {
+                  _id: { $ifNull: ["$type", "unknown"] },
+                  count: { $sum: 1 },
+                  earliest: { $min: "$publicationDate" },
+                  latest: { $max: "$publicationDate" },
+                  usOnly: { $sum: { $cond: [{ $eq: ["$affiliationCountries", ["US"]] }, 1, 0] } },
+                  canadaOnly: {
+                    $sum: { $cond: [{ $eq: ["$affiliationCountries", ["CA"]] }, 1, 0] },
+                  },
+                  collaboration: {
+                    $sum: { $cond: [{ $eq: [{ $size: "$affiliationCountries" }, 2] }, 1, 0] },
+                  },
+                },
               },
-            },
-          },
-        ], { maxTimeMS: 15_000 }).toArray()
+              { $sort: { count: -1, _id: 1 } },
+              {
+                $group: {
+                  _id: null,
+                  total: { $sum: "$count" },
+                  earliest: { $min: "$earliest" },
+                  latest: { $max: "$latest" },
+                  types: { $push: { type: "$_id", count: "$count" } },
+                  usOnly: { $sum: "$usOnly" },
+                  canadaOnly: { $sum: "$canadaOnly" },
+                  collaboration: { $sum: "$collaboration" },
+                },
+              },
+              {
+                $project: {
+                  _id: 0,
+                  total: 1,
+                  earliest: 1,
+                  latest: 1,
+                  types: 1,
+                  affiliations: {
+                    usOnly: "$usOnly",
+                    canadaOnly: "$canadaOnly",
+                    collaboration: "$collaboration",
+                  },
+                },
+              },
+            ],
+            { maxTimeMS: 15_000 },
+          )
+          .toArray()
           .then(([summary]) => {
             summaryExpiresAt = Date.now() + summaryCacheMs;
             return {

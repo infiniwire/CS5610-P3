@@ -76,7 +76,9 @@ export default function PaperIndex() {
     <section className="research-index" id="papers" aria-labelledby="papers-heading">
       <div className="index-heading">
         <h1 id="papers-heading">Research index</h1>
-        <p>Data from <a href="https://openalex.org/">OpenAlex</a></p>
+        <p>
+          Data from <a href="https://openalex.org/">OpenAlex</a>
+        </p>
       </div>
       <fieldset className="paper-filters">
         <legend>Filter papers</legend>
@@ -91,10 +93,14 @@ export default function PaperIndex() {
             <option value="">
               {universityError
                 ? "Universities unavailable"
-                : universities.length ? "All universities" : "Loading universities…"}
+                : universities.length
+                  ? "All universities"
+                  : "Loading universities…"}
             </option>
             {universities.map(({ id, name, country }) => (
-              <option key={id} value={id}>{name} ({country})</option>
+              <option key={id} value={id}>
+                {name} ({country})
+              </option>
             ))}
           </select>
         </label>
@@ -115,7 +121,9 @@ export default function PaperIndex() {
             <option value="citations_asc">Least cited</option>
           </select>
         </label>
-        <button type="button" onClick={() => setQuery(initialQuery)}>Reset</button>
+        <button type="button" onClick={() => setQuery(initialQuery)}>
+          Reset
+        </button>
       </fieldset>
 
       <section aria-label="Paper results" aria-busy={loading}>
@@ -123,7 +131,9 @@ export default function PaperIndex() {
         {current?.error && (
           <p role="alert">
             Could not load papers.{" "}
-            <button type="button" onClick={() => setQuery({ ...query })}>Retry</button>
+            <button type="button" onClick={() => setQuery({ ...query })}>
+              Retry
+            </button>
           </p>
         )}
         {data?.papers.length === 0 && <p role="status">No papers match these filters.</p>}

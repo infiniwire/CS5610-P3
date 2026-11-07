@@ -37,10 +37,7 @@ const papers = app.locals.db.collection("papers");
 app.use("/api/papers", createPaperRouter(papers));
 
 try {
-  await Promise.all([
-    ensurePaperIndexes(papers),
-    configureAuth(app, client, sessionSecret),
-  ]);
+  await Promise.all([ensurePaperIndexes(papers), configureAuth(app, client, sessionSecret)]);
 } catch (error) {
   console.error(`Could not initialize PaperPulse (${error.name}).`);
   await client.close();
