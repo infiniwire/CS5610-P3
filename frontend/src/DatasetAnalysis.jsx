@@ -1,3 +1,4 @@
+import { loadDatasetSummary, readDatasetSummary } from "./datasetSummaryCache.js";
 import { useEffect, useState } from "react";
 import ReportPage from "./ReportPage.jsx";
 import "./DatasetAnalysis.css";
@@ -59,23 +60,21 @@ function SummaryTable({ number, caption, category, rows, total }) {
 }
 
 export default function DatasetAnalysis() {
-  const [summary, setSummary] = useState(null);
+  const [summary, setSummary] = useState(readDatasetSummary);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/papers/summary", { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("Dataset summary unavailable.");
-        return response.json();
-      })
+    let active = true;
+    loadDatasetSummary()
       .then((data) => {
-        if (!controller.signal.aborted) setSummary(data);
+        if (active) setSummary(data);
       })
       .catch(() => {
-        if (!controller.signal.aborted) setFailed(true);
+        if (active) setFailed(true);
       });
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const largest = summary?.types[0];

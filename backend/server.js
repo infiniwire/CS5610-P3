@@ -4,6 +4,8 @@ import { loadEnvFile } from "node:process";
 import { fileURLToPath } from "node:url";
 import { configureAuth } from "./auth.js";
 import { connectDatabase } from "./database.js";
+import { createDatasetSummaryCache } from "./dataset-summary.js";
+
 import { createPaperRouter, ensurePaperIndexes } from "./papers.js";
 
 const envFile = new URL("../.env", import.meta.url);
@@ -34,7 +36,9 @@ try {
 const app = express();
 app.locals.db = client.db("paperpulse");
 const papers = app.locals.db.collection("papers");
-app.use("/api/papers", createPaperRouter(papers));
+const summaryCache = createDatasetSummaryCache(papers, app.locals.db.collection("appCache"));
+
+app.use("/api/papers", createPaperRouter(papers, summaryCache));
 
 try {
   await Promise.all([ensurePaperIndexes(papers), configureAuth(app, client, sessionSecret)]);
@@ -47,7 +51,7 @@ const port = Number(process.env.PORT ?? 3000);
 const frontend = fileURLToPath(new URL("../frontend/dist/", import.meta.url));
 
 app.use(express.static(frontend));
-app.get("/papers", (_req, res) => res.sendFile("index.html", { root: frontend }));
+app.get(["/papers"], (_req, res) => res.sendFile("index.html", { root: frontend }));
 const server = app.listen(port, "0.0.0.0", async (error) => {
   if (error) {
     console.error(`PaperPulse could not listen on port ${port} (${error.code}).`);
@@ -57,10 +61,13 @@ const server = app.listen(port, "0.0.0.0", async (error) => {
   }
 
   console.log(`PaperPulse listening on port ${port}`);
+  void summaryCache.start();
 });
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.once(signal, () => {
+    summaryCache.stop();
+
     server.close(() => client.close());
   });
 }
