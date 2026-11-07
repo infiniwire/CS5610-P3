@@ -1,3 +1,4 @@
+import ProjectFooter from "./ProjectFooter.jsx";
 import { useLayoutEffect, useRef } from "react";
 import AuthPanel from "./AuthPanel.jsx";
 import DatasetAnalysis from "./DatasetAnalysis.jsx";
@@ -63,46 +64,52 @@ export default function App() {
 
   if (isPapersPage) {
     return (
-      <main className="paper-browser" id="top">
-        {masthead}
-        <PaperIndex />
-        <footer className="site-footer">
-          <span>PaperPulse · 2026</span>
-          <a href="#top">Back to top</a>
-        </footer>
-      </main>
+      <>
+        <main className="paper-browser" id="top">
+          {masthead}
+          <PaperIndex />
+          <footer className="site-footer">
+            <span>PaperPulse · 2026</span>
+            <a href="#top">Back to top</a>
+          </footer>
+        </main>
+        <ProjectFooter />
+      </>
     );
   }
 
   return (
-    <main className="paper-browser report-document" id="top" ref={reportDocument}>
-      {masthead}
-      <ReportPage number={1}>
-        <header className="report-title">
-          <h1>PaperPulse</h1>
-          <p className="report-subtitle">A Research Index for U.S. and Canadian Universities</p>
-          <p className="report-edition">2026 Edition</p>
-        </header>
+    <>
+      <main className="paper-browser report-document" id="top" ref={reportDocument}>
+        {masthead}
+        <ReportPage number={1}>
+          <header className="report-title">
+            <h1>PaperPulse</h1>
+            <p className="report-subtitle">A Research Index for U.S. and Canadian Universities</p>
+            <p className="report-edition">2026 Edition</p>
+          </header>
 
-        <p className="report-abstract" id="abstract">
-          <span>Abstract.</span> PaperPulse uses OpenAlex records to explore 2026 research from U.S.
-          and Canadian universities by institution, topic, publication date, and citations.
-        </p>
-
-        <section className="report-section" aria-labelledby="introduction-heading">
-          <h2 id="introduction-heading">1. Introduction and goal</h2>
-          <p>
-            Our goal is to make university research easier to discover and compare. Browse the{" "}
-            <a href="/papers">paper index</a> by university or month, using OpenAlex records{" "}
-            <a className="report-citation" href="#ref-openalex">
-              [1]
-            </a>
-            .
+          <p className="report-abstract" id="abstract">
+            <span>Abstract.</span> PaperPulse uses OpenAlex records to explore 2026 research from
+            U.S. and Canadian universities by institution, topic, publication date, and citations.
           </p>
-        </section>
 
-        <DatasetAnalysis />
-      </ReportPage>
-    </main>
+          <section className="report-section" aria-labelledby="introduction-heading">
+            <h2 id="introduction-heading">1. Introduction and goal</h2>
+            <p>
+              Our goal is to make university research easier to discover and compare. Browse the{" "}
+              <a href="/papers">paper index</a> by university or month, using OpenAlex records{" "}
+              <a className="report-citation" href="#ref-openalex">
+                [1]
+              </a>
+              .
+            </p>
+          </section>
+
+          <DatasetAnalysis />
+        </ReportPage>
+      </main>
+      <ProjectFooter />
+    </>
   );
 }

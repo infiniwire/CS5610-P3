@@ -267,6 +267,53 @@ body {
   font-size: var(--font-small);
 }
 
+.project-footer {
+  padding: 1rem 1rem 1.25rem;
+  border: 0;
+  background: transparent;
+  color: #70695f;
+  font-size: var(--font-caption);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.project-footer p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin: 0;
+}
+
+.project-footer-university {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.project-footer-seal {
+  --seal-size: 18px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--seal-size);
+  height: var(--seal-size);
+  overflow: hidden;
+  opacity: 0.6;
+}
+
+.project-footer-seal img {
+  /* The original seal asset includes transparent padding. */
+  position: absolute;
+  width: calc(var(--seal-size) * 2.673629);
+  height: auto;
+  max-width: none;
+  left: calc(var(--seal-size) * -0.83812);
+  top: calc(var(--seal-size) * -0.276762);
+}
+
 .paper-filters {
   display: grid;
   grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto;

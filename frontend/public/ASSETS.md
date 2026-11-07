@@ -1,0 +1,1 @@
+`northeastern-seal.png` is the Northeastern University seal, reused from the existing CS5610-P2 project asset. Its original source is the [Northeastern Brand Center](https://brand.northeastern.edu/logos/seal/).
