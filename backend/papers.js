@@ -148,5 +148,43 @@ export function createPaperRouter(papers, summaryCache) {
     }
   });
 
+  router.get("/:workId", async (req, res) => {
+    if (!/^W[1-9]\d*$/.test(req.params.workId)) {
+      return res.status(400).json({ error: "Invalid OpenAlex work ID." });
+    }
+
+    try {
+      const paper = await papers.findOne(
+        {
+          openAlexId: `https://openalex.org/${req.params.workId}`,
+        },
+        {
+          projection: {
+            _id: 0,
+            openAlexId: 1,
+            title: 1,
+            doi: 1,
+            authors: 1,
+            institutions: 1,
+            publicationDate: 1,
+            type: 1,
+            citedByCount: 1,
+            primaryTopic: 1,
+            topics: 1,
+            sourceUrl: 1,
+            source: 1,
+            isRetracted: 1,
+            syncedAt: 1,
+          },
+          maxTimeMS: 10_000,
+        },
+      );
+      if (!paper) return res.status(404).json({ error: "Paper not found." });
+      return res.json({ paper });
+    } catch (error) {
+      console.error(`Paper detail query failed (${error.name}).`);
+      return res.status(500).json({ error: "Could not load paper details." });
+    }
+  });
   return router;
 }

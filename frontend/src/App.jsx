@@ -115,7 +115,8 @@ export default function App() {
             <h2 id="introduction-heading">1. Introduction and goal</h2>
             <p>
               Our goal is to make university research easier to discover and compare. Browse the{" "}
-              <a href="/papers">paper index</a> by university or month, using OpenAlex records{" "}
+              <a href="/papers">paper index</a> by university or month, and select a title for
+              details, using OpenAlex records{" "}
               <a className="report-citation" href="#ref-openalex">
                 [1]
               </a>

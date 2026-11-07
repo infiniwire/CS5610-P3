@@ -1,0 +1,93 @@
+.paper-details {
+  box-sizing: border-box;
+  width: min(45rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  overflow-wrap: anywhere;
+}
+
+.paper-details::backdrop {
+  background: #211d1980;
+}
+
+.paper-detail-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--ink);
+  font-variant-caps: small-caps;
+}
+
+.paper-details h2 {
+  margin: 1.25rem 0;
+  font-size: var(--font-title);
+  line-height: 1.3;
+}
+
+.paper-details h3 {
+  margin: 1.25rem 0 0.35rem;
+  font-size: var(--font-body);
+  font-variant-caps: small-caps;
+}
+
+.paper-details p,
+.paper-details ul {
+  margin: 0.35rem 0;
+}
+
+.paper-details ul {
+  padding-left: 1.25rem;
+}
+
+.paper-detail-metadata {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.4rem 1.5rem;
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.paper-detail-metadata dt {
+  font-weight: 700;
+}
+
+.paper-detail-metadata dd {
+  margin: 0;
+}
+
+.paper-retraction {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.paper-detail-footer {
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ink);
+}
+
+.paper-detail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+@media (max-width: 30rem) {
+  .paper-detail-metadata {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+
+  .paper-detail-metadata dd + dt {
+    margin-top: 0.5rem;
+  }
+}
