@@ -3,6 +3,7 @@ import AuthDialog from "./AuthDialog.jsx";
 
 import DatasetAnalysis from "./DatasetAnalysis.jsx";
 import PaperIndex from "./PaperIndex.jsx";
+import AnalysisPage from "./AnalysisPage.jsx";
 
 import ReportPage from "./ReportPage.jsx";
 import ProjectFooter from "./ProjectFooter.jsx";
@@ -12,8 +13,9 @@ import "./App.css";
 
 export default function App() {
   const isPapersPage = /^\/papers\/?$/i.test(window.location.pathname);
+  const isAnalysisPage = /^\/analysis\/?$/i.test(window.location.pathname);
 
-  const isIndexPage = isPapersPage;
+  const isIndexPage = isPapersPage || isAnalysisPage;
   const [loginOpen, setLoginOpen] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -62,6 +64,9 @@ export default function App() {
           <a href="/papers" aria-current={isPapersPage ? "page" : undefined}>
             Papers
           </a>
+          <a href="/analysis" aria-current={isAnalysisPage ? "page" : undefined}>
+            Analysis
+          </a>
 
           <button
             type="button"
@@ -82,9 +87,9 @@ export default function App() {
   if (isIndexPage) {
     return (
       <ReaderContext.Provider value={reader}>
-        <main className="paper-browser" id="top">
+        <main className={`paper-browser${isAnalysisPage ? " analysis-document" : ""}`} id="top">
           {masthead}
-          {<PaperIndex />}
+          {isAnalysisPage ? <AnalysisPage /> : <PaperIndex />}
           <footer className="site-footer">
             <span>PaperPulse · 2026</span>
             <a href="#top">Back to top</a>
@@ -116,7 +121,8 @@ export default function App() {
             <p>
               Our goal is to make university research easier to discover and compare. Browse the{" "}
               <a href="/papers">paper index</a> by title, author, topic, university, or month, and
-              select a title for details, using OpenAlex records{" "}
+              select a title for details. Explore publication patterns in{" "}
+              <a href="/analysis">Analysis</a>, using OpenAlex records{" "}
               <a className="report-citation" href="#ref-openalex">
                 [1]
               </a>
