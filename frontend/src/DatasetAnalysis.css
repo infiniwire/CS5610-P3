@@ -3,13 +3,13 @@
   margin: 1em auto;
   border-collapse: collapse;
   border-block: 1px solid var(--ink);
-  font-size: 10pt;
+  font-size: var(--font-small);
   text-align: left;
 }
 
 .dataset-table caption {
   margin-bottom: 0.35em;
-  font-size: 9pt;
+  font-size: var(--font-caption);
 }
 
 .dataset-table caption span {

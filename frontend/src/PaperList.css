@@ -12,12 +12,12 @@
 .paper-list li::marker {
   color: var(--muted-ink);
   content: "[" counter(list-item) "]  ";
-  font-size: 0.9rem;
+  font-size: var(--font-small);
 }
 
 .paper-list h3 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: var(--font-section);
   line-height: 1.35;
 }
 
@@ -34,6 +34,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1rem;
-  font-size: 0.9rem;
+  font-size: var(--font-small);
   font-style: italic;
 }

@@ -28,16 +28,19 @@
   --muted-ink: #62584f;
   --rule: #d8d0c4;
   --accent: #7b2923;
+  --font-serif: "Latin Modern Roman", Georgia, serif;
+  --font-body: 11pt;
+  --font-title: 17pt;
+  --font-section: 12pt;
+  --font-small: 10pt;
+  --font-caption: 9pt;
 }
 
 body {
   margin: 0;
   background: #eeebe4;
   color: var(--ink);
-  font:
-    1.0625rem/1.5 "Latin Modern Roman",
-    Georgia,
-    serif;
+  font: var(--font-body)/1.5 var(--font-serif);
 }
 
 .paper-browser {
@@ -150,7 +153,7 @@ body {
   padding: 0.5in 0.85in 0.34in;
   border: 1px solid var(--rule);
   background: #fff;
-  font-size: 11pt;
+  font-size: var(--font-body);
   transform: scale(var(--sheet-scale, 1));
   transform-origin: top left;
 }
@@ -175,14 +178,14 @@ body {
 
 .report-title h1 {
   margin: 0;
-  font-size: 17pt;
+  font-size: var(--font-title);
   line-height: 1.18;
   text-transform: uppercase;
 }
 
 .report-subtitle {
   margin: 0.4em 0 0;
-  font-size: 12pt;
+  font-size: var(--font-section);
   line-height: 1.25;
   text-wrap: balance;
   text-transform: uppercase;
@@ -212,7 +215,7 @@ body {
 
 .report-section h2 {
   margin: 0 0 0.5em;
-  font-size: 12pt;
+  font-size: var(--font-section);
   font-weight: 400;
   text-align: center;
 }
@@ -239,17 +242,17 @@ body {
 
 .report-analysis h3 {
   margin: 1em 0 0.35em;
-  font-size: 11pt;
+  font-size: var(--font-body);
 }
 
 .report-footer {
   margin-block: 1.2em 0;
-  font-size: 10pt;
+  font-size: var(--font-small);
 }
 
 .report-footer h2 {
   margin: 0 0 0.4em;
-  font-size: 12pt;
+  font-size: var(--font-section);
   font-weight: 400;
   text-align: center;
 }
@@ -283,14 +286,14 @@ body {
 
 .index-heading h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--font-title);
   line-height: 1.2;
 }
 
 .index-heading p {
   margin: 0;
   color: var(--muted-ink);
-  font-size: 0.9rem;
+  font-size: var(--font-small);
 }
 
 .paper-filters {
@@ -309,7 +312,7 @@ body {
   padding: 0;
   margin-bottom: 0.35rem;
   color: var(--muted-ink);
-  font-size: 0.9rem;
+  font-size: var(--font-small);
   font-style: italic;
 }
 
@@ -318,7 +321,7 @@ body {
   grid-template-columns: minmax(0, 1fr);
   gap: 0.25rem;
   min-width: 0;
-  font-size: 0.95rem;
+  font-size: var(--font-body);
 }
 
 .paper-browser select,
@@ -367,7 +370,7 @@ body {
   border-top: 1px solid var(--rule);
   border-bottom: 0;
   color: var(--muted-ink);
-  font-size: 0.9rem;
+  font-size: var(--font-small);
 }
 
 @media (max-width: 67rem) {
