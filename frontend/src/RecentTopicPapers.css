@@ -1,0 +1,7 @@
+.recent-topic-papers > label {
+  max-width: 36rem;
+}
+.recent-topic-papers > p {
+  font-size: var(--font-small);
+  color: var(--muted-ink);
+}

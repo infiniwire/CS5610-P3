@@ -5,3 +5,4 @@ dist/
 .railway/
 /Doc/Courses/
 /Doc/Project 3_*.pdf
+.DS_Store

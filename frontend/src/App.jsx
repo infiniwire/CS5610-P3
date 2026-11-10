@@ -114,7 +114,7 @@ export default function App() {
           ) : isSavedPage ? (
             <SavedPapersPage key={currentUser?.id ?? "guest"} />
           ) : isTopicsPage ? (
-            <MyTopicsPage />
+            <MyTopicsPage key={currentUser?.id ?? "guest"} />
           ) : isSettingsPage ? (
             <SettingsPage />
           ) : (
