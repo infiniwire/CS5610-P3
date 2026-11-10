@@ -1,0 +1,43 @@
+.topic-comparison-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.topic-comparison-filters label:first-child {
+  flex: 1;
+  min-width: 12rem;
+}
+.topic-university-comparison > p {
+  font-size: var(--font-small);
+  color: var(--muted-ink);
+}
+.topic-table-scroll {
+  overflow-x: auto;
+}
+.topic-university-comparison table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--font-small);
+}
+.topic-university-comparison caption {
+  text-align: left;
+  font-size: var(--font-caption);
+  padding-bottom: 0.6rem;
+}
+.topic-university-comparison th,
+.topic-university-comparison td {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.topic-university-comparison thead {
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.topic-university-comparison tbody th {
+  font-weight: normal;
+}
+.topic-university-comparison td:last-child,
+.topic-university-comparison thead th:last-child {
+  text-align: right;
+}

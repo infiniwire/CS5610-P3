@@ -10,6 +10,9 @@ import { createRankingsCache } from "./rankings.js";
 import { createPaperRouter, ensurePaperIndexes } from "./papers.js";
 import { createSavedPaperRouter, ensureSavedPaperIndexes } from "./saved-papers.js";
 
+import { createTopicCaches, createTopicRouter } from "./topics.js";
+import { createFollowedTopicRouter, ensureFollowedTopicIndexes } from "./followed-topics.js";
+
 const envFile = new URL("../.env", import.meta.url);
 if (existsSync(envFile)) {
   loadEnvFile(envFile);
@@ -41,6 +44,8 @@ const papers = app.locals.db.collection("papers");
 const summaryCache = createDatasetSummaryCache(papers, app.locals.db.collection("appCache"));
 const analysisCache = createAnalysisCache(papers, app.locals.db.collection("appCache"));
 const rankingsCache = createRankingsCache(papers, app.locals.db.collection("appCache"));
+const topicCaches = createTopicCaches(papers, app.locals.db.collection("appCache"));
+app.use("/api/topics", createTopicRouter(topicCaches));
 app.use("/api/papers", createPaperRouter(papers, summaryCache));
 app.get("/api/analysis", async (_req, res) => {
   try {
@@ -77,6 +82,7 @@ app.get("/api/rankings", async (_req, res) => {
 try {
   await Promise.all([
     ensurePaperIndexes(papers),
+    ensureFollowedTopicIndexes(app.locals.db.collection("followedTopics"), papers),
     ensureSavedPaperIndexes(app.locals.db.collection("savedPapers")),
     configureAuth(app, client, sessionSecret),
   ]);
@@ -92,6 +98,10 @@ app.use(
   "/api/saved-papers",
   createSavedPaperRouter(app.locals.db.collection("savedPapers"), papers),
 );
+app.use(
+  "/api/followed-topics",
+  createFollowedTopicRouter(app.locals.db.collection("followedTopics"), papers),
+);
 app.use(express.static(frontend));
 app.get(
   ["/papers", "/analysis", "/rankings", "/saved-papers", "/my-topics", "/settings"],
@@ -106,6 +116,7 @@ const server = app.listen(port, "0.0.0.0", async (error) => {
   }
 
   console.log(`PaperPulse listening on port ${port}`);
+  void topicCaches.start();
   void summaryCache.start();
   void analysisCache.start();
   void rankingsCache.start();
@@ -113,6 +124,7 @@ const server = app.listen(port, "0.0.0.0", async (error) => {
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.once(signal, () => {
+    topicCaches.stop();
     summaryCache.stop();
     analysisCache.stop();
     rankingsCache.stop();
