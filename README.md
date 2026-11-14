@@ -10,7 +10,7 @@ Users can search for research papers, explore university rankings, save papers t
 - **Tian Yuan** — Research Category Tracker, Followed Topics CRUD, Recent Papers Dashboard, and University Comparison
 
 **Course:** CS 5610 — Web Development  
-**University:** Northeastern University  
+**University:** Northeastern University
 
 ## 2. Project Objective
 
@@ -81,17 +81,17 @@ Users can follow research topics and monitor publication activity.
 
 ## 4. Technology Stack
 
-| Layer | Technologies |
-|---|---|
-| Frontend | React, React Hooks, JavaScript, HTML5, CSS3 |
-| Backend | Node.js, Express.js |
-| Database | MongoDB (Native Node.js Driver) |
-| Authentication | Passport.js, Express Session |
-| API Communication | Fetch API |
-| Research Data | OpenAlex |
-| Testing | Node.js Test Runner |
-| Code Quality | ESLint, Prettier |
-| Deployment | Railway |
+| Layer             | Technologies                                |
+| ----------------- | ------------------------------------------- |
+| Frontend          | React, React Hooks, JavaScript, HTML5, CSS3 |
+| Backend           | Node.js, Express.js                         |
+| Database          | MongoDB (Native Node.js Driver)             |
+| Authentication    | Passport.js, Express Session                |
+| API Communication | Fetch API                                   |
+| Research Data     | OpenAlex                                    |
+| Testing           | Node.js Test Runner                         |
+| Code Quality      | ESLint, Prettier                            |
+| Deployment        | Railway                                     |
 
 The application uses client-side rendering with React and communicates with the Express backend through RESTful APIs.
 
@@ -223,13 +223,13 @@ PaperPulse uses MongoDB to store research data and user-specific information.
 
 Major collections include:
 
-| Collection | Purpose |
-|---|---|
-| `papers` | Research publications and metadata |
-| `users` | Registered user accounts |
-| `savedPapers` | User reading lists, notes, and reading status |
+| Collection                 | Purpose                                          |
+| -------------------------- | ------------------------------------------------ |
+| `papers`                   | Research publications and metadata               |
+| `users`                    | Registered user accounts                         |
+| `savedPapers`              | User reading lists, notes, and reading status    |
 | Followed topics collection | User research interests and tracking information |
-| `appCache` | Cached research statistics and rankings |
+| `appCache`                 | Cached research statistics and rankings          |
 
 Research publication metadata is imported from OpenAlex.
 
