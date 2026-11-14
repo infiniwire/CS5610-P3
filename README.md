@@ -290,7 +290,9 @@ See [Design Document](Doc/design-document.md).
 
 ## 10. Deployment
 
-**Live Application:** [Add deployed website URL]
+**Live Application:** [PaperPulse on Railway](https://paperpulse.up.railway.app/)
+
+**Presentation Slides:** [PaperPulse on Google Slides](https://docs.google.com/presentation/d/1-Wb3bF-cQ0_Dj9BkOcp4qgJsg0uFDE2gsVt0IWQt-4c/edit?usp=sharing)
 
 **Demo Video:** [Add public narrated demonstration URL]
 
