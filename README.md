@@ -9,7 +9,10 @@ Users can search for research papers, explore university rankings, save papers t
 - **Sheng Qin** — Paper Discovery, Saved Papers, Authentication, and Research Analytics
 - **Tian Yuan** — Research Category Tracker, Followed Topics CRUD, Recent Papers Dashboard, and University Comparison
 
-**Course:** CS 5610 — Web Development  
+**Course:** CS 5610 — Web Development
+
+**Course link:** [Add course URL]
+
 **University:** Northeastern University
 
 ## 2. Project Objective
@@ -135,10 +138,11 @@ CS5610-P3/
 │       ├── my-topics.png
 │       └── rankings.png
 │
-├── .env
+├── .gitattributes
 ├── .gitignore
 ├── eslint.config.mjs
 ├── package.json
+├── LICENSE
 └── README.md
 ```
 
@@ -148,74 +152,52 @@ CS5610-P3/
 
 Before running the application, ensure that the following are available:
 
-- Node.js and npm
+- Node.js 22.13 or later within the 22.x release line, and npm
 - MongoDB database connection
 - Git
-- OpenAlex API key (required for importing research data)
 
-### Step 1: Clone the Repository
+### Install from the repository root
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/infiniwire/CS5610-P3.git
 cd CS5610-P3
+npm ci
 ```
 
-### Step 2: Install Dependencies
+The root npm workspace installs the backend and frontend dependencies from the shared lockfile.
 
-Install the backend dependencies:
-
-```bash
-cd backend
-npm install
-```
-
-Install the frontend dependencies:
-
-```bash
-cd ../frontend
-npm install
-```
-
-### Step 3: Configure Environment Variables
+### Configure environment variables
 
 Create a `.env` file in the project root directory.
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
 SESSION_SECRET=your_secure_session_secret
-OPENALEX_API_KEY=your_openalex_api_key
 ```
 
-The session secret must contain at least 32 bytes.
+The session secret must contain at least 32 bytes. Use a MongoDB connection with access to the
+`paperpulse` database. The OpenAlex importer also requires `OPENALEX_API_KEY` when importing data.
 
 **Security:** Never commit the `.env` file or any real credentials to GitHub.
 
-### Step 4: Build the Frontend
-
-From the frontend directory:
+### Run in development
 
 ```bash
-npm run build
-```
-
-This generates the production-ready React application in `frontend/dist/`.
-
-### Step 5: Start the Backend
-
-```bash
-cd ../backend
 npm run dev
 ```
 
-The Express server runs on port 3000 by default.
+Open the URL printed by Vite, usually `http://localhost:5173`. The root command starts both
+workspaces, and Vite proxies API requests to Express on port 3000 by default.
 
-### Step 6: Open the Application
+### Build and run
 
-Visit:
+```bash
+npm run build
+npm start
+```
 
-**http://localhost:3000**
-
-The backend serves the compiled React frontend and provides the REST API endpoints.
+Open `http://localhost:3000`. Express serves the production build from `frontend/dist/` and provides
+the REST API endpoints.
 
 ## 7. Database
 
@@ -223,13 +205,14 @@ PaperPulse uses MongoDB to store research data and user-specific information.
 
 Major collections include:
 
-| Collection                 | Purpose                                          |
-| -------------------------- | ------------------------------------------------ |
-| `papers`                   | Research publications and metadata               |
-| `users`                    | Registered user accounts                         |
-| `savedPapers`              | User reading lists, notes, and reading status    |
-| Followed topics collection | User research interests and tracking information |
-| `appCache`                 | Cached research statistics and rankings          |
+| Collection       | Purpose                                                     |
+| ---------------- | ----------------------------------------------------------- |
+| `papers`         | Research publications and metadata                          |
+| `users`          | Registered user accounts                                    |
+| `savedPapers`    | User reading lists, notes, and reading status               |
+| `followedTopics` | User research interests, notes, and last-checked times      |
+| `sessions`       | Passport login sessions                                     |
+| `appCache`       | Cached research statistics, rankings, and topic comparisons |
 
 Research publication metadata is imported from OpenAlex.
 
@@ -250,6 +233,23 @@ Test files cover:
 - Frontend topic request utilities.
 
 The project uses ESLint for code quality and Prettier for consistent formatting.
+
+Run the checks from the repository root.
+
+```bash
+npm run check
+npm run build
+npm test
+```
+
+To include both MongoDB integration suites, load the root `.env` when running the tests.
+
+```bash
+node --env-file=.env --test backend/*.test.js frontend/src/*.test.js
+```
+
+The integration suites create and clean up separate test databases. The MongoDB connection used
+for testing needs permission to create and drop those databases.
 
 ## 9. Design Documentation
 
@@ -298,7 +298,7 @@ The application is designed to be deployed on Railway, with Express serving the 
 
 ## 11. License
 
-MIT License — see `LICENSE` for details once the license file is added.
+PaperPulse source code is available under the [MIT License](LICENSE).
 
 ## 12. Acknowledgments
 
