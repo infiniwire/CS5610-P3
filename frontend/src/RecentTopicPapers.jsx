@@ -1,3 +1,4 @@
+import { followedTopics } from "./propTypes.js";
 import { useEffect, useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import PaperList from "./PaperList.jsx";
@@ -90,3 +91,7 @@ export default function RecentTopicPapers({ followedTopics }) {
     </section>
   );
 }
+
+RecentTopicPapers.propTypes = {
+  followedTopics: followedTopics.isRequired,
+};

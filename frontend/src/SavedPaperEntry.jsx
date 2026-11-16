@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { savedPaperEntry } from "./propTypes.js";
 import { readingStatuses } from "./savedPaperRequest.js";
 import SavedPaperEditor from "./SavedPaperEditor.jsx";
 import "./SavedPaperEntry.css";
@@ -54,3 +56,11 @@ export default function SavedPaperEntry({ item, onOpen, onChange, onRemove, onRe
     </article>
   );
 }
+
+SavedPaperEntry.propTypes = {
+  item: savedPaperEntry.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onReload: PropTypes.func.isRequired,
+};

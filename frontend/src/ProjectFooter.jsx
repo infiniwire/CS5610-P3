@@ -13,3 +13,5 @@ export default function ProjectFooter() {
     </footer>
   );
 }
+
+ProjectFooter.propTypes = {};

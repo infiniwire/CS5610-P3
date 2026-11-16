@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { countryAnalysisFields, monthlyCounts } from "./analysisPropTypes.js";
 import {
   Figure,
   CountryCitationBars,
@@ -141,3 +143,9 @@ export default function CountryAnalysis({ data, completeMonths, lastMonthPartial
     </>
   );
 }
+
+CountryAnalysis.propTypes = {
+  data: PropTypes.shape(countryAnalysisFields).isRequired,
+  completeMonths: monthlyCounts,
+  lastMonthPartial: PropTypes.bool,
+};

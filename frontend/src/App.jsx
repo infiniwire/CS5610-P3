@@ -168,3 +168,5 @@ export default function App() {
     </ReaderContext.Provider>
   );
 }
+
+App.propTypes = {};

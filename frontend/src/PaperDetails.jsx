@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { paperIdentity } from "./propTypes.js";
 import { useEffect, useRef, useState } from "react";
 import SavedPaperControls from "./SavedPaperControls.jsx";
 import "./PaperDetails.css";
@@ -186,3 +188,14 @@ export default function PaperDetails({ selectedPaper, onClose, onSavedChange }) 
     </dialog>
   );
 }
+
+ExternalLink.propTypes = {
+  href: PropTypes.string,
+  children: PropTypes.node.isRequired,
+};
+
+PaperDetails.propTypes = {
+  selectedPaper: paperIdentity.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSavedChange: PropTypes.func,
+};

@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { paperIdentity } from "./propTypes.js";
 import { useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import { savedPaperRequest } from "./savedPaperRequest.js";
@@ -57,3 +59,11 @@ export default function PaperSaveButton({ paper, saved, loading, unavailable, on
     </span>
   );
 }
+
+PaperSaveButton.propTypes = {
+  paper: paperIdentity.isRequired,
+  saved: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
+  unavailable: PropTypes.bool.isRequired,
+  onSaved: PropTypes.func.isRequired,
+};

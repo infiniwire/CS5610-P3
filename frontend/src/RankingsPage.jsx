@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import PaperDetails from "./PaperDetails.jsx";
 import { loadRankings, readRankings } from "./rankingsCache.js";
@@ -333,3 +334,13 @@ export default function RankingsPage() {
     </article>
   );
 }
+
+EntityLink.propTypes = {
+  board: PropTypes.oneOf(["universities", "authors", "topics"]).isRequired,
+  row: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+RankingsPage.propTypes = {};

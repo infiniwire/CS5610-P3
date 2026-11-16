@@ -180,3 +180,5 @@ export default function SavedPapersPage() {
     </section>
   );
 }
+
+SavedPapersPage.propTypes = {};

@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { savedPaper } from "./propTypes.js";
 import { useId, useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import { readingStatuses, savedPaperPath, savedPaperRequest } from "./savedPaperRequest.js";
@@ -109,3 +111,10 @@ export default function SavedPaperEditor({ savedPaper, onChange, onRemove, onRel
     </div>
   );
 }
+
+SavedPaperEditor.propTypes = {
+  savedPaper: savedPaper.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onReload: PropTypes.func.isRequired,
+};

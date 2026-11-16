@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useId, useRef, useState } from "react";
 import "./UniversityFilter.css";
 
@@ -157,3 +158,16 @@ export default function UniversityFilter({ universities, value, onChange, failed
     </div>
   );
 }
+
+UniversityFilter.propTypes = {
+  universities: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      country: PropTypes.string,
+    }).isRequired,
+  ).isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  failed: PropTypes.bool.isRequired,
+};

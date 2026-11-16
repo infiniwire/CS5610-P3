@@ -226,3 +226,5 @@ export default function PaperIndex() {
     </section>
   );
 }
+
+PaperIndex.propTypes = {};

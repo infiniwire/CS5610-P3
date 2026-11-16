@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { followedTopics } from "./propTypes.js";
 import { useEffect, useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import { topicRequest } from "./topicRequest.js";
@@ -126,3 +128,8 @@ export default function TopicSearch({ followedTopics, onFollow }) {
     </section>
   );
 }
+
+TopicSearch.propTypes = {
+  followedTopics: followedTopics.isRequired,
+  onFollow: PropTypes.func.isRequired,
+};

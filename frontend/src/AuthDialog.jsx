@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useId, useLayoutEffect, useRef } from "react";
 import AuthPanel from "./AuthPanel.jsx";
 import "./AuthDialog.css";
@@ -61,3 +62,9 @@ export default function AuthDialog({ open, onClose, onUserChange }) {
     </dialog>
   );
 }
+
+AuthDialog.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onUserChange: PropTypes.func,
+};

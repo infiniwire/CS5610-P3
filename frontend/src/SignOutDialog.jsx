@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import { authRequest } from "./authRequest.js";
 import "./SignOutDialog.css";
@@ -74,3 +75,8 @@ export default function SignOutDialog({ onCancel, onSignedOut }) {
     </dialog>
   );
 }
+
+SignOutDialog.propTypes = {
+  onCancel: PropTypes.func.isRequired,
+  onSignedOut: PropTypes.func.isRequired,
+};

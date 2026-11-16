@@ -1,3 +1,13 @@
+import PropTypes from "prop-types";
+import {
+  citationBins,
+  countryAnalysisFields,
+  lorenzPoints,
+  monthlySeries,
+  namedCounts,
+  topicCounts,
+  universityMetrics,
+} from "./analysisPropTypes.js";
 import { useEffect, useState } from "react";
 import { loadAnalysis, readAnalysis } from "./analysisCache.js";
 import CountryAnalysis, { countryNames } from "./CountryAnalysis.jsx";
@@ -461,3 +471,34 @@ export default function AnalysisPage() {
     </article>
   );
 }
+
+AnalysisContent.propTypes = {
+  data: PropTypes.shape({
+    ...countryAnalysisFields,
+    overview: PropTypes.shape({
+      total: PropTypes.number.isRequired,
+      earliest: PropTypes.string,
+      latest: PropTypes.string,
+    }).isRequired,
+    topics: topicCounts,
+    citations: PropTypes.shape({
+      bins: citationBins,
+      lorenz: lorenzPoints,
+      known: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired,
+      missing: PropTypes.number.isRequired,
+      mean: PropTypes.number,
+      median: PropTypes.number,
+      topTenShare: PropTypes.number,
+    }).isRequired,
+    heatmap: monthlySeries,
+    universities: universityMetrics,
+    types: namedCounts,
+    affiliations: namedCounts,
+    topicMissing: PropTypes.number.isRequired,
+    calculatedAt: PropTypes.string.isRequired,
+    nextRefreshAt: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+AnalysisPage.propTypes = {};

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useId, useRef, useState } from "react";
 import { authRequest } from "./authRequest.js";
 import "./AuthPanel.css";
@@ -125,3 +126,10 @@ export default function AuthPanel({ headingId, open, onUserChange, onSignedIn })
     </section>
   );
 }
+
+AuthPanel.propTypes = {
+  headingId: PropTypes.string,
+  open: PropTypes.bool.isRequired,
+  onUserChange: PropTypes.func,
+  onSignedIn: PropTypes.func,
+};

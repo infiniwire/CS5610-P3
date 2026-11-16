@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { followedTopicEntry } from "./propTypes.js";
 import { useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import { shortTopicId, topicRequest } from "./topicRequest.js";
@@ -92,3 +94,10 @@ export default function FollowedTopicEntry({ item, onChange, onRemove, onReload 
     </article>
   );
 }
+
+FollowedTopicEntry.propTypes = {
+  item: followedTopicEntry.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onReload: PropTypes.func.isRequired,
+};

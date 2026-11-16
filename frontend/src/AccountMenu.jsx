@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useId, useRef, useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import "./AccountMenu.css";
@@ -136,3 +137,8 @@ export default function AccountMenu({ loginOpen, onRequestSignOut }) {
     </div>
   );
 }
+
+AccountMenu.propTypes = {
+  loginOpen: PropTypes.bool.isRequired,
+  onRequestSignOut: PropTypes.func.isRequired,
+};

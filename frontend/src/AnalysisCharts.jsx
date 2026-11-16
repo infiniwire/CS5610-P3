@@ -1,3 +1,14 @@
+import PropTypes from "prop-types";
+import {
+  citationBins,
+  lorenzPoints,
+  monthlyCounts,
+  monthlySeries,
+  namedCounts,
+  namedCountryCitations,
+  topicCounts,
+  universityMetrics,
+} from "./analysisPropTypes.js";
 import { useId, useState } from "react";
 
 export const number = (n) => new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(n);
@@ -565,3 +576,85 @@ export function LorenzCurve({ data }) {
     </Plot>
   );
 }
+
+const chartMonths = PropTypes.arrayOf(
+  PropTypes.shape({
+    month: PropTypes.string.isRequired,
+  }).isRequired,
+).isRequired;
+
+Figure.propTypes = {
+  id: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  columns: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  rows: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.node.isRequired).isRequired).isRequired,
+};
+
+Plot.propTypes = {
+  label: PropTypes.string.isRequired,
+  height: PropTypes.number,
+  width: PropTypes.number,
+  responsive: PropTypes.bool,
+  children: PropTypes.func.isRequired,
+};
+
+Axes.propTypes = {
+  max: PropTypes.number.isRequired,
+  yLabel: PropTypes.string,
+  xLabel: PropTypes.string,
+  percentScale: PropTypes.bool,
+};
+
+TopicBars.propTypes = {
+  data: topicCounts,
+  total: PropTypes.number.isRequired,
+};
+
+CitationBars.propTypes = {
+  data: citationBins,
+};
+
+MonthlyLine.propTypes = {
+  data: monthlyCounts,
+};
+
+TypeDonut.propTypes = {
+  data: namedCounts,
+  total: PropTypes.number.isRequired,
+};
+
+CompositionLegend.propTypes = {
+  data: namedCounts,
+  total: PropTypes.number.isRequired,
+  counts: PropTypes.bool,
+};
+
+AffiliationStack.propTypes = {
+  data: namedCounts,
+  total: PropTypes.number.isRequired,
+};
+
+CountryCitationBars.propTypes = {
+  data: namedCountryCitations,
+};
+
+CountryMonthlyStack.propTypes = {
+  data: monthlySeries,
+  months: chartMonths,
+};
+
+TopicHeatmap.propTypes = {
+  data: monthlySeries,
+  months: chartMonths,
+};
+
+UniversityScatter.propTypes = {
+  data: universityMetrics,
+};
+
+LorenzCurve.propTypes = {
+  data: lorenzPoints,
+};

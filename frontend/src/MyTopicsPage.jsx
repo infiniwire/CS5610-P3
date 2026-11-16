@@ -136,3 +136,5 @@ export default function MyTopicsPage() {
     </section>
   );
 }
+
+MyTopicsPage.propTypes = {};

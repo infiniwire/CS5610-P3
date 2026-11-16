@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { loadDatasetSummary, readDatasetSummary } from "./datasetSummaryCache.js";
 import "./DatasetAnalysis.css";
@@ -181,3 +182,18 @@ export default function DatasetAnalysis() {
     </>
   );
 }
+
+SummaryTable.propTypes = {
+  number: PropTypes.number.isRequired,
+  caption: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  rows: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      records: PropTypes.number.isRequired,
+    }).isRequired,
+  ).isRequired,
+  total: PropTypes.number.isRequired,
+};
+
+DatasetAnalysis.propTypes = {};

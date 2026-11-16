@@ -1,3 +1,4 @@
+import { followedTopics } from "./propTypes.js";
 import { useEffect, useState } from "react";
 import { shortTopicId, topicRequest } from "./topicRequest.js";
 import "./TopicUniversityComparison.css";
@@ -134,3 +135,7 @@ export default function TopicUniversityComparison({ followedTopics }) {
     </section>
   );
 }
+
+TopicUniversityComparison.propTypes = {
+  followedTopics: followedTopics.isRequired,
+};

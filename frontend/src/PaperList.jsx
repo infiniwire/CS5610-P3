@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+import { listedPaper } from "./propTypes.js";
 import { useEffect, useState } from "react";
 import PaperDetails from "./PaperDetails.jsx";
 import PaperSaveButton from "./PaperSaveButton.jsx";
@@ -120,3 +122,8 @@ export default function PaperList({ papers, start }) {
     </>
   );
 }
+
+PaperList.propTypes = {
+  papers: PropTypes.arrayOf(listedPaper.isRequired).isRequired,
+  start: PropTypes.number.isRequired,
+};

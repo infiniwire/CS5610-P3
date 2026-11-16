@@ -26,3 +26,5 @@ export default function SettingsPage() {
     </section>
   );
 }
+
+SettingsPage.propTypes = {};

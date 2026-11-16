@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useReader } from "./ReaderContext.js";
 import SavedPaperEditor from "./SavedPaperEditor.jsx";
@@ -100,3 +101,8 @@ export default function SavedPaperControls({ openAlexId, onSavedChange }) {
     </section>
   );
 }
+
+SavedPaperControls.propTypes = {
+  openAlexId: PropTypes.string.isRequired,
+  onSavedChange: PropTypes.func,
+};

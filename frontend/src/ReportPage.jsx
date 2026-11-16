@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 export default function ReportPage({ number, children }) {
   return (
     <article className="report-page" aria-label={`Page ${number}`}>
@@ -10,3 +11,8 @@ export default function ReportPage({ number, children }) {
     </article>
   );
 }
+
+ReportPage.propTypes = {
+  number: PropTypes.number.isRequired,
+  children: PropTypes.node.isRequired,
+};
