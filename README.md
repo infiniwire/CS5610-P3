@@ -296,6 +296,10 @@ See [Design Document](Doc/design-document.md).
 
 The application is designed to be deployed on Railway, with Express serving the React production build and MongoDB providing persistent data storage.
 
+### Live Papers page
+
+![PaperPulse Papers page showing search fields, university and month filters, and live paper results](assets/paperpulse-papers.jpg)
+
 ## 11. License
 
 PaperPulse source code is available under the [MIT License](LICENSE).
