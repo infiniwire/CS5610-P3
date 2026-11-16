@@ -10,9 +10,6 @@ Users can search for research papers, explore university rankings, save papers t
 - **Tian Yuan** — Research Category Tracker, Followed Topics CRUD, Recent Papers Dashboard, and University Comparison
 
 **Course:** CS 5610 — Web Development
-
-**Course link:** [Add course URL]
-
 **University:** Northeastern University
 
 ## 2. Project Objective
